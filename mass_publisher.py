@@ -370,11 +370,12 @@ def ensure_directories_and_files():
     os.makedirs("templates", exist_ok=True)
     
     csv_path = os.path.join("data", "retro_games.csv")
-    fieldnames = list(INITIAL_CSV_DATA[0].keys())
-    with open(csv_path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(INITIAL_CSV_DATA)
+    if not os.path.exists(csv_path):
+        fieldnames = list(INITIAL_CSV_DATA[0].keys())
+        with open(csv_path, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(INITIAL_CSV_DATA)
 
     with open(os.path.join("templates", "article_template.html"), "w", encoding="utf-8") as f:
         f.write(ARTICLE_TEMPLATE)
@@ -419,10 +420,10 @@ def build_site():
     with open("index.html", "w", encoding="utf-8") as out_idx:
         out_idx.write(INDEX_TEMPLATE.format(list_items=list_items_html))
 
-def run_git_commands():
+def run_git_commands(commit_msg="Expand database with 30 new high-value JDM retro items"):
     commands = [
         ["git", "add", "."],
-        ["git", "commit", "-m", "Upgrade to CSV-driven architecture with Anti-Bootleg guides (15 core items)"],
+        ["git", "commit", "-m", commit_msg],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:
