@@ -35,7 +35,7 @@ def make_buyee_url(keyword_jp):
     return f"https://buyee.jp/mercari/search?keyword={urllib.parse.quote(keyword_jp)}"
 
 def make_amazon_url(query_en, amazon_tag):
-    base_url = f"https://www.amazon.com/s?k={urllib.parse.quote(query_en)}"
+    base_url = f"https://www.amazon.co.jp/s?k={urllib.parse.quote(query_en)}"
     if amazon_tag and amazon_tag != "YOUR_STORE_ID_HERE":
         return f"{base_url}&tag={urllib.parse.quote(amazon_tag)}"
     return base_url

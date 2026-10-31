@@ -23,9 +23,9 @@ ARTICLES = [
             {"label": "Search Famicom Color GBA SP on Buyee", "query": "ゲームボーイアドバンスSP ファミコンカラー"}
         ],
         "ads": [
-            {"label": "🔧 Recommended: IPS V5 Backlight Display Upgrade Kit", "url": "https://www.amazon.com/s?k=GBA+SP+IPS+backlight+kit"},
-            {"label": "🛠️ Essential: Tri-wing Screwdriver & Opening Tool Set", "url": "https://www.amazon.com/s?k=triwing+screwdriver+gba"},
-            {"label": "🛡️ Protection: Hard Shell Carrying Case for GBA SP", "url": "https://www.amazon.com/s?k=gba+sp+carrying+case"}
+            {"label": "🔧 Recommended: IPS V5 Backlight Display Upgrade Kit", "url": "https://www.amazon.co.jp/s?k=GBA+SP+IPS+backlight+kit"},
+            {"label": "🛠️ Essential: Tri-wing Screwdriver & Opening Tool Set", "url": "https://www.amazon.co.jp/s?k=triwing+screwdriver+gba"},
+            {"label": "🛡️ Protection: Hard Shell Carrying Case for GBA SP", "url": "https://www.amazon.co.jp/s?k=gba+sp+carrying+case"}
         ]
     },
     {
@@ -38,9 +38,9 @@ ARTICLES = [
             {"label": "Search Crystal/Limited Color DS Lite on Buyee", "query": "ニンテンドーDS Lite 限定 本体"}
         ],
         "ads": [
-            {"label": "🔋 Essential: USB Charging Cable for DS Lite", "url": "https://www.amazon.com/s?k=ds+lite+usb+charger"},
-            {"label": "🛡️ Protection: Clear Crystal Protective Armor Shell Case", "url": "https://www.amazon.com/s?k=ds+lite+clear+case"},
-            {"label": "🖊️ Maintenance: Replacement Touch Stylus Pens (Pack)", "url": "https://www.amazon.com/s?k=ds+lite+stylus+replacement"}
+            {"label": "🔋 Essential: USB Charging Cable for DS Lite", "url": "https://www.amazon.co.jp/s?k=ds+lite+usb+charger"},
+            {"label": "🛡️ Protection: Clear Crystal Protective Armor Shell Case", "url": "https://www.amazon.co.jp/s?k=ds+lite+clear+case"},
+            {"label": "🖊️ Maintenance: Replacement Touch Stylus Pens (Pack)", "url": "https://www.amazon.co.jp/s?k=ds+lite+stylus+replacement"}
         ]
     },
     {
@@ -53,9 +53,9 @@ ARTICLES = [
             {"label": "Search Tested GameCube Consoles on Buyee", "query": "ゲームキューブ 本体 動作確認"}
         ],
         "ads": [
-            {"label": "🎮 Essential: GameCube Controller USB Adapter for Switch/PC", "url": "https://www.amazon.com/s?k=gamecube+controller+adapter+switch"},
-            {"label": "🕹️ Maintenance: Replacement Analog Sticks & T3 Box Parts", "url": "https://www.amazon.com/s?k=gamecube+controller+replacement+sticks"},
-            {"label": "🔌 Cable Management: Extra Long Extension Cable for GC", "url": "https://www.amazon.com/s?k=gamecube+controller+extension+cable"}
+            {"label": "🎮 Essential: GameCube Controller USB Adapter for Switch/PC", "url": "https://www.amazon.co.jp/s?k=gamecube+controller+adapter+switch"},
+            {"label": "🕹️ Maintenance: Replacement Analog Sticks & T3 Box Parts", "url": "https://www.amazon.co.jp/s?k=gamecube+controller+replacement+sticks"},
+            {"label": "🔌 Cable Management: Extra Long Extension Cable for GC", "url": "https://www.amazon.co.jp/s?k=gamecube+controller+extension+cable"}
         ]
     },
     {
@@ -68,9 +68,9 @@ ARTICLES = [
             {"label": "Search CIB Pokémon Ruby & Sapphire on Buyee", "query": "ポケットモンスター ルビー サファイア 箱説"}
         ],
         "ads": [
-            {"label": "🛡️ Protection: Clear Acrylic Display Protector Cases for GBA Boxes", "url": "https://www.amazon.com/s?k=gba+box+protector+case"},
-            {"label": "🔋 Repair: CR1616 Battery Holder with Tabs for Cartridge Saves", "url": "https://www.amazon.com/s?k=cr1616+battery+holder+gba"},
-            {"label": "🔍 Maintenance: Precision Bit Screwdriver for Game Cartridges", "url": "https://www.amazon.com/s?k=gameboy+cartridge+screwdriver"}
+            {"label": "🛡️ Protection: Clear Acrylic Display Protector Cases for GBA Boxes", "url": "https://www.amazon.co.jp/s?k=gba+box+protector+case"},
+            {"label": "🔋 Repair: CR1616 Battery Holder with Tabs for Cartridge Saves", "url": "https://www.amazon.co.jp/s?k=cr1616+battery+holder+gba"},
+            {"label": "🔍 Maintenance: Precision Bit Screwdriver for Game Cartridges", "url": "https://www.amazon.co.jp/s?k=gameboy+cartridge+screwdriver"}
         ]
     },
     {
@@ -83,9 +83,9 @@ ARTICLES = [
             {"label": "Search Game Boy Player Unit (Black/Orange) on Buyee", "query": "ゲームボーイプレーヤー 本体"}
         ],
         "ads": [
-            {"label": "📺 Modern Display: HDMI Upgrader / Line Doubler for GameCube", "url": "https://www.amazon.com/s?k=gamecube+hdmi+adapter"},
-            {"label": "🎮 Control: Wireless Retro Receiver Adapter for GameCube", "url": "https://www.amazon.com/s?k=gamecube+wireless+controller+adapter"},
-            {"label": "🧰 Storage: Memory Card 1019 Blocks for GameCube", "url": "https://www.amazon.com/s?k=gamecube+memory+card"}
+            {"label": "📺 Modern Display: HDMI Upgrader / Line Doubler for GameCube", "url": "https://www.amazon.co.jp/s?k=gamecube+hdmi+adapter"},
+            {"label": "🎮 Control: Wireless Retro Receiver Adapter for GameCube", "url": "https://www.amazon.co.jp/s?k=gamecube+wireless+controller+adapter"},
+            {"label": "🧰 Storage: Memory Card 1019 Blocks for GameCube", "url": "https://www.amazon.co.jp/s?k=gamecube+memory+card"}
         ]
     }
 ]
