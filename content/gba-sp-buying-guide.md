@@ -1,7 +1,7 @@
 ---
 title: "The Ultimate Guide to Buying a Japanese Game Boy Advance SP: Exclusive Colors, 'Junk' Goldmines, and How to Import"
 description: "Learn why modders and collectors import the Game Boy Advance SP from Japan, how to decode Japanese condition ranks, and find cheap IPS mod bases on Mercari via Buyee."
-date: "2026-10-31"
+date: "2026-11-01"
 ---
 
 # The Ultimate Guide to Buying a Japanese Game Boy Advance SP: Exclusive Colors, 'Junk' Goldmines, and How to Import
