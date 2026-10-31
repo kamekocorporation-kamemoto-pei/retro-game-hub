@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JDM Retro Gaming & Importing Hub</title>
-    <meta name="description" content="Your ultimate guide to importing Japanese retro consoles, rare games, and modding gear via Buyee.">
+    <title>JDM Retro Gaming Import & Anti-Bootleg Hub</title>
+    <meta name="description" content="The definitive database for collectors and modders to buy authentic Japanese retro consoles, controllers, and CIB games without bootlegs.">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 900px; margin: 0 auto; padding: 32px; background: #f3f4f6; }
-        header { text-align: center; margin-bottom: 40px; }
-        h1 { font-size: 2.3rem; color: #111827; margin-bottom: 8px; }
-        p.subtitle { color: #4b5563; font-size: 1.1rem; }
-        .article-card { background: #ffffff; padding: 28px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 24px; transition: transform 0.2s; }
-        .article-card:hover { transform: translateY(-3px); }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1f2937; max-width: 920px; margin: 0 auto; padding: 32px 20px; background: #f3f4f6; }
+        header { text-align: center; margin-bottom: 32px; }
+        h1 { font-size: 2.2rem; color: #111827; margin-bottom: 8px; }
+        p.subtitle { color: #4b5563; font-size: 1.1rem; max-width: 680px; margin: 0 auto; }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0; }
+        .search-input { width: 100%; max-width: 480px; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 1rem; display: block; margin: 0 auto 20px auto; }
+        .article-card { background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s; }
+        .article-card:hover { transform: translateY(-2px); }
         .badge { display: inline-block; background: #dbeafe; color: #1e40af; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; margin-bottom: 8px; }
-        .article-card h2 { margin: 6px 0 10px 0; font-size: 1.4rem; }
+        .auth-tag { display: inline-block; background: #fef3c7; color: #b45309; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; margin-left: 6px; }
+        .article-card h2 { margin: 6px 0 10px 0; font-size: 1.35rem; }
         .article-card h2 a { color: #1d4ed8; text-decoration: none; }
         .article-card h2 a:hover { text-decoration: underline; }
-        .read-more { display: inline-block; margin-top: 12px; font-weight: 600; color: #2563eb; text-decoration: none; }
+        .read-more { display: inline-block; margin-top: 10px; font-weight: 600; color: #2563eb; text-decoration: none; }
         .read-more:hover { text-decoration: underline; }
         footer { text-align: center; margin-top: 50px; color: #6b7280; font-size: 0.9rem; }
     </style>
@@ -24,50 +27,148 @@
 <body>
     <header>
         <h1>🎮 JDM Retro Gaming Import Hub</h1>
-        <p class="subtitle">The definitive guide for collectors and modders to source authentic Japanese retro gear via Buyee.</p>
+        <p class="subtitle">100% Authentic Japanese Consoles, Mods & CIB Games. Every guide includes an Anti-Bootleg Verification Checklist and direct Buyee search filters.</p>
     </header>
 
-    <main>
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="filterGuides()">
+
+    <main id="guideList">
         
         <div class="article-card">
             <span class="badge">Retro Handhelds</span>
-            <h2><a href="gba-sp-buying-guide.html">The Ultimate Guide to Buying a Japanese Game Boy Advance SP: Exclusive Colors, 'Junk' Goldmines, and How to Import</a></h2>
-            <p>Learn why modders and collectors import the Game Boy Advance SP from Japan, decode condition ranks, and find cheap IPS mod bases.</p>
-            <a class="read-more" href="gba-sp-buying-guide.html">Read Guide & Browse Inventory &rarr;</a>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="gba-sp-buying-guide.html">Game Boy Advance SP (JDM Models & Mod Bases)</a></h2>
+            <p>Japan received exclusive colorways (Pearl Blue, Famicom Color, Pokemon Center editions) and offers a massive supply of inexpensive 'Junk' units ideal for IPS V5 screen modding.</p>
+            <a class="read-more" href="gba-sp-buying-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
         <div class="article-card">
             <span class="badge">Retro Handhelds</span>
-            <h2><a href="nintendo-ds-lite-guide.html">Why the Nintendo DS Lite from Japan is the Ultimate Budget Retro Buy: Region-Free GBA & DS Gaming</a></h2>
-            <p>Discover how to score pristine, rock-bottom priced Nintendo DS Lite consoles from Japan that play both DS and GBA cartridges globally.</p>
-            <a class="read-more" href="nintendo-ds-lite-guide.html">Read Guide & Browse Inventory &rarr;</a>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="nintendo-ds-lite-guide.html">Nintendo DS Lite (USG-001 Japanese Import)</a></h2>
+            <p>The DS Lite sold over 18 million units in Japan. Because of massive domestic supply, pristine consoles sell for a fraction of US/EU prices.</p>
+            <a class="read-more" href="nintendo-ds-lite-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
         <div class="article-card">
             <span class="badge">Controllers & Gear</span>
-            <h2><a href="gamecube-controller-white-guide.html">The Ultimate Smash Bros. Player's Guide: Importing the Official White GameCube Controller from Japan</a></h2>
-            <p>Why competitive Smash Ultimate and Melee players worldwide hunt for the Japanese-exclusive White GC Controller with T3 boards.</p>
-            <a class="read-more" href="gamecube-controller-white-guide.html">Read Guide & Browse Inventory &rarr;</a>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="gamecube-controller-white-guide.html">Official White GameCube Controller (T3 Stickbox)</a></h2>
+            <p>Released exclusively in Japan in 2008, the late-model White controller features a 3-meter long cable and guaranteed Type-3 (T3) plastic-screw stickboxes favored by competitive Smash Bros. players.</p>
+            <a class="read-more" href="gamecube-controller-white-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
         <div class="article-card">
             <span class="badge">Collector Games</span>
-            <h2><a href="pokemon-gba-cib-guide.html">How to Safely Buy Authentic Japanese Pokémon GBA Games (Emerald, Ruby, Sapphire) Without Bootlegs</a></h2>
-            <p>Avoid counterfeit cartridges on eBay. Discover why Japanese CIB (Complete in Box) Pokémon Emerald and Ruby are the ultimate collector safe-haven.</p>
-            <a class="read-more" href="pokemon-gba-cib-guide.html">Read Guide & Browse Inventory &rarr;</a>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="pokemon-gba-cib-guide.html">Pokémon Emerald, Ruby & Sapphire (Authentic Japanese CIB)</a></h2>
+            <p>Over 80% of loose English Pokémon GBA cartridges on Western marketplaces are counterfeit. Japanese CIB (Complete in Box) copies are far cheaper, authentic, and feature stunning exclusive box artwork.</p>
+            <a class="read-more" href="pokemon-gba-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
         <div class="article-card">
             <span class="badge">Accessories & Hardware</span>
-            <h2><a href="game-boy-player-startup-disc-guide.html">The Holy Grail of Retro Setup: Importing the Game Boy Player and Startup Disc for GameCube</a></h2>
-            <p>Play GBA games on your big screen TV. Learn why the Japanese Game Boy Player Startup Disc is a high-value collector target and how to import it safely.</p>
-            <a class="read-more" href="game-boy-player-startup-disc-guide.html">Read Guide & Browse Inventory &rarr;</a>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="game-boy-player-startup-disc-guide.html">Game Boy Player & Startup Disc for GameCube</a></h2>
+            <p>Japan got exclusive matching colors (Spice Orange, Symphonic Green, Platinum, Indigo), and even if you use a US/PAL GameCube with Swiss homebrew, the Japanese hardware attachment fits and works natively.</p>
+            <a class="read-more" href="game-boy-player-startup-disc-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Retro Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="ps-vita-2000-japan-colors.html">PlayStation Vita Slim (PCH-2000 JDM Exclusive Colors)</a></h2>
+            <p>North America only received standard Black and Aqua Blue. Japan received Neon Orange, Glacier White, Lime Green/White, Light Blue, Metallic Red, and Dragon Quest Metal Slime editions.</p>
+            <a class="read-more" href="ps-vita-2000-japan-colors.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Retro Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="game-boy-micro-jdm-guide.html">Game Boy Micro (20th Anniversary Famicom Edition)</a></h2>
+            <p>The iconic red-and-gold Famicom 20th Anniversary edition and Mother 3 Deluxe Box were flagship releases in Japan and remain in much cleaner collector condition.</p>
+            <a class="read-more" href="game-boy-micro-jdm-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Retro Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sega-saturn-white-import-guide.html">Japanese Sega Saturn (White Console & 2D Shmups/Fighters)</a></h2>
+            <p>The Sega Saturn was a massive hit in Japan, resulting in the legendary Mist Grey/White console design and hundreds of arcade-perfect 2D shooters and Capcom/SNK fighters that never left Japan.</p>
+            <a class="read-more" href="sega-saturn-white-import-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Retro Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="nintendo-64-clear-colors-guide.html">Nintendo 64 Jusco & Clear Color Consoles (NUS-001 JPN)</a></h2>
+            <p>Japan received exclusive two-tone clear consoles (Midnight Blue, Clear Blue/White, Clear Red/White, and the rare Jusco 30th Anniversary Clear Grey) at far lower prices than US Funtastic models.</p>
+            <a class="read-more" href="nintendo-64-clear-colors-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="ascii-keyboard-controller-gc.html">ASCII Keyboard Controller for GameCube (Phantasy Star Online)</a></h2>
+            <p>Created for Phantasy Star Online Episode I & II, this hybrid controller/keyboard is one of the most iconic and sought-after Nintendo peripherals ever made, and it was never sold in North American retail stores.</p>
+            <a class="read-more" href="ascii-keyboard-controller-gc.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="mother-3-gba-authentic-guide.html">MOTHER 3 (Game Boy Advance Authentic Japanese Release)</a></h2>
+            <p>Never released outside Japan, Mother 3 is the crown jewel of any GBA collection. While eBay is flooded with $15 fake English repro carts, the authentic Japanese boxed release holds real collector value.</p>
+            <a class="read-more" href="mother-3-gba-authentic-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Action & Shmups</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="ikaruga-dreamcast-gamecube-guide.html">Ikaruga 斑鳩 (Dreamcast & GameCube Authentic Japanese Edition)</a></h2>
+            <p>Treasure's masterpiece bullet-hell shooter commands massive prices in the West, while the original Japanese Dreamcast (complete with Obi spine card) and GameCube releases are much more affordable.</p>
+            <a class="read-more" href="ikaruga-dreamcast-gamecube-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Action & Shmups</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="castlevania-symphony-of-the-night-jp.html">Castlevania: Symphony of the Night (悪魔城ドラキュラX 月下の夜想曲)</a></h2>
+            <p>While the US Black Label PS1 version sells for $120–$180+, the Japanese original release features superior Ayami Kojima cover art and bonus physical media at a much fairer price.</p>
+            <a class="read-more" href="castlevania-symphony-of-the-night-jp.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Retro Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="neo-geo-pocket-color-slim-guide.html">Neo Geo Pocket Color & Slimline (New Neo Geo Pocket)</a></h2>
+            <p>SNK released a lighter, 13% thinner revision called the 'New Neo Geo Pocket Color' (Slimline) exclusively in Japan right before the company folded.</p>
+            <a class="read-more" href="neo-geo-pocket-color-slim-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="chrono-trigger-sfc-cib-guide.html">Chrono Trigger (Super Famicom Complete in Box with Map/Cards)</a></h2>
+            <p>A complete-in-box US SNES copy of Chrono Trigger costs $700–$1,000+ and is heavily counterfeited. The original Japanese Super Famicom CIB version features Akira Toriyama's iconic vertical box art for around $25–$40!</p>
+            <a class="read-more" href="chrono-trigger-sfc-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
     </main>
 
     <footer>
-        <p>&copy; 2026 JDM Retro Gaming Hub. Powered by automated curation & Buyee proxy shopping.</p>
+        <p>&copy; 2026 JDM Retro Gaming Import Hub. Built for collectors to avoid counterfeits and source directly from Japan.</p>
     </footer>
+
+    <script>
+        function filterGuides() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const cards = document.querySelectorAll('.article-card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>
