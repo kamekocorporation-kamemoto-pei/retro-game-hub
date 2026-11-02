@@ -80,7 +80,7 @@ def build_site():
             out_f.write(html_out)
 
         list_items_html += f"""
-        <div class="article-card">
+        <div class="article-card" data-category="{row['category']}">
             <span class="badge">{row['category']}</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="{row['slug']}.html">{row['title']}</a></h2>
@@ -95,7 +95,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "."],
-        ["git", "commit", "-m", "Add secure Amazon Associate tag integration"],
+        ["git", "commit", "-m", "Unify categories, add PC Engine Duo-R guide, and implement responsive category tabs with count badges"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:

@@ -10,10 +10,23 @@
         header { text-align: center; margin-bottom: 32px; }
         h1 { font-size: 2.2rem; color: #111827; margin-bottom: 8px; }
         p.subtitle { color: #4b5563; font-size: 1.1rem; max-width: 680px; margin: 0 auto; }
-        .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0; }
-        .search-input { width: 100%; max-width: 480px; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 1rem; display: block; margin: 0 auto 20px auto; }
-        .article-card { background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s; }
-        .article-card:hover { transform: translateY(-2px); }
+        
+        .search-input { width: 100%; max-width: 520px; padding: 14px 20px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; display: block; margin: 0 auto 20px auto; outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: #ffffff; }
+        .search-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+        
+        .category-tabs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 28px auto; padding: 4px 0; max-width: 860px; }
+        @media (max-width: 640px) {
+            .category-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+        }
+        .tab-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 9999px; background: #ffffff; color: #4b5563; font-size: 0.92rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .tab-btn:hover { background: #f9fafb; border-color: #9ca3af; color: #111827; transform: translateY(-1px); }
+        .tab-btn.active { background: #1d4ed8; border-color: #1d4ed8; color: #ffffff; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25); }
+        .tab-badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.78rem; font-weight: 700; background: #f3f4f6; color: #4b5563; transition: background 0.2s, color 0.2s; }
+        .tab-btn:hover .tab-badge { background: #e5e7eb; color: #1f2937; }
+        .tab-btn.active .tab-badge { background: rgba(255, 255, 255, 0.25); color: #ffffff; }
+        
+        .article-card { background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s, box-shadow 0.2s; }
+        .article-card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.08); }
         .badge { display: inline-block; background: #dbeafe; color: #1e40af; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; margin-bottom: 8px; }
         .auth-tag { display: inline-block; background: #fef3c7; color: #b45309; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; margin-left: 6px; }
         .article-card h2 { margin: 6px 0 10px 0; font-size: 1.35rem; }
@@ -21,6 +34,8 @@
         .article-card h2 a:hover { text-decoration: underline; }
         .read-more { display: inline-block; margin-top: 10px; font-weight: 600; color: #2563eb; text-decoration: none; }
         .read-more:hover { text-decoration: underline; }
+        
+        .no-results { display: none; text-align: center; padding: 48px 20px; background: #ffffff; border-radius: 12px; color: #6b7280; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
         footer { text-align: center; margin-top: 50px; color: #6b7280; font-size: 0.9rem; }
     </style>
 </head>
@@ -30,27 +45,39 @@
         <p class="subtitle">100% Authentic Japanese Consoles, Mods & CIB Games. Every guide includes an Anti-Bootleg Verification Checklist and direct Buyee search filters.</p>
     </header>
 
-    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="filterGuides()">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., Duo-R, GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="applyFilters()">
+
+    <div class="category-tabs" id="categoryTabs" role="tablist">
+        <button type="button" class="tab-btn active" data-category="All" onclick="setCategory('All')">All <span class="tab-badge" data-count-for="All"></span></button>
+        <button type="button" class="tab-btn" data-category="Consoles" onclick="setCategory('Consoles')">Consoles <span class="tab-badge" data-count-for="Consoles"></span></button>
+        <button type="button" class="tab-btn" data-category="Handhelds" onclick="setCategory('Handhelds')">Handhelds <span class="tab-badge" data-count-for="Handhelds"></span></button>
+        <button type="button" class="tab-btn" data-category="Controllers & Gear" onclick="setCategory('Controllers & Gear')">Controllers &amp; Gear <span class="tab-badge" data-count-for="Controllers & Gear"></span></button>
+        <button type="button" class="tab-btn" data-category="Collector Games" onclick="setCategory('Collector Games')">Collector Games <span class="tab-badge" data-count-for="Collector Games"></span></button>
+    </div>
+
+    <div id="noResultsMessage" class="no-results">
+        <p>🔍 No matching guides found. Try another search term or switch categories.</p>
+    </div>
 
     <main id="guideList">
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="gba-sp-buying-guide.html">Game Boy Advance SP (JDM Models & Mod Bases)</a></h2>
             <p>Japan received exclusive colorways (Pearl Blue, Famicom Color, Pokemon Center editions) and offers a massive supply of inexpensive 'Junk' units ideal for IPS V5 screen modding.</p>
             <a class="read-more" href="gba-sp-buying-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="nintendo-ds-lite-guide.html">Nintendo DS Lite (USG-001 Japanese Import)</a></h2>
             <p>The DS Lite sold over 18 million units in Japan. Because of massive domestic supply, pristine consoles sell for a fraction of US/EU prices.</p>
             <a class="read-more" href="nintendo-ds-lite-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="gamecube-controller-white-guide.html">Official White GameCube Controller (T3 Stickbox)</a></h2>
@@ -58,7 +85,7 @@
             <a class="read-more" href="gamecube-controller-white-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="pokemon-gba-cib-guide.html">Pokémon Emerald, Ruby & Sapphire (Authentic Japanese CIB)</a></h2>
@@ -66,47 +93,47 @@
             <a class="read-more" href="pokemon-gba-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Accessories & Hardware</span>
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="game-boy-player-startup-disc-guide.html">Game Boy Player & Startup Disc for GameCube</a></h2>
             <p>Japan got exclusive matching colors (Spice Orange, Symphonic Green, Platinum, Indigo), and even if you use a US/PAL GameCube with Swiss homebrew, the Japanese hardware attachment fits and works natively.</p>
             <a class="read-more" href="game-boy-player-startup-disc-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="ps-vita-2000-japan-colors.html">PlayStation Vita Slim (PCH-2000 JDM Exclusive Colors)</a></h2>
             <p>North America only received standard Black and Aqua Blue. Japan received Neon Orange, Glacier White, Lime Green/White, Light Blue, Metallic Red, and Dragon Quest Metal Slime editions.</p>
             <a class="read-more" href="ps-vita-2000-japan-colors.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="game-boy-micro-jdm-guide.html">Game Boy Micro (20th Anniversary Famicom Edition)</a></h2>
             <p>The iconic red-and-gold Famicom 20th Anniversary edition and Mother 3 Deluxe Box were flagship releases in Japan and remain in much cleaner collector condition.</p>
             <a class="read-more" href="game-boy-micro-jdm-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="sega-saturn-white-import-guide.html">Japanese Sega Saturn (White Console & 2D Shmups/Fighters)</a></h2>
             <p>The Sega Saturn was a massive hit in Japan, resulting in the legendary Mist Grey/White console design and hundreds of arcade-perfect 2D shooters and Capcom/SNK fighters that never left Japan.</p>
             <a class="read-more" href="sega-saturn-white-import-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="nintendo-64-clear-colors-guide.html">Nintendo 64 Jusco & Clear Color Consoles (NUS-001 JPN)</a></h2>
             <p>Japan received exclusive two-tone clear consoles (Midnight Blue, Clear Blue/White, Clear Red/White, and the rare Jusco 30th Anniversary Clear Grey) at far lower prices than US Funtastic models.</p>
             <a class="read-more" href="nintendo-64-clear-colors-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="ascii-keyboard-controller-gc.html">ASCII Keyboard Controller for GameCube (Phantasy Star Online)</a></h2>
@@ -114,7 +141,7 @@
             <a class="read-more" href="ascii-keyboard-controller-gc.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="mother-3-gba-authentic-guide.html">MOTHER 3 (Game Boy Advance Authentic Japanese Release)</a></h2>
@@ -122,31 +149,31 @@
             <a class="read-more" href="mother-3-gba-authentic-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="ikaruga-dreamcast-gamecube-guide.html">Ikaruga 斑鳩 (Dreamcast & GameCube Authentic Japanese Edition)</a></h2>
             <p>Treasure's masterpiece bullet-hell shooter commands massive prices in the West, while the original Japanese Dreamcast (complete with Obi spine card) and GameCube releases are much more affordable.</p>
             <a class="read-more" href="ikaruga-dreamcast-gamecube-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="castlevania-symphony-of-the-night-jp.html">Castlevania: Symphony of the Night (悪魔城ドラキュラX 月下の夜想曲)</a></h2>
             <p>While the US Black Label PS1 version sells for $120–$180+, the Japanese original release features superior Ayami Kojima cover art and bonus physical media at a much fairer price.</p>
             <a class="read-more" href="castlevania-symphony-of-the-night-jp.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="neo-geo-pocket-color-slim-guide.html">Neo Geo Pocket Color & Slimline (New Neo Geo Pocket)</a></h2>
             <p>SNK released a lighter, 13% thinner revision called the 'New Neo Geo Pocket Color' (Slimline) exclusively in Japan right before the company folded.</p>
             <a class="read-more" href="neo-geo-pocket-color-slim-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="chrono-trigger-sfc-cib-guide.html">Chrono Trigger (Super Famicom Complete in Box with Map/Cards)</a></h2>
@@ -154,87 +181,87 @@
             <a class="read-more" href="chrono-trigger-sfc-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="super-famicom-1chip-guide.html">Super Famicom 1CHIP Console (1CHIP-01, 02, 03)</a></h2>
             <p>The late-production '1CHIP' Super Famicom is the holy grail for CRT and upscaler enthusiasts, delivering razor-sharp native RGB video without the blurriness of early 2-chip consoles. While US 1CHIP models fetch astronomical prices, Japanese 1CHIP units are significantly more affordable and commonly found in pristine condition.</p>
             <a class="read-more" href="super-famicom-1chip-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="sega-dreamcast-ntsc-j-guide.html">Sega Dreamcast NTSC-J Console (VA1 Revision / Orange Swirl)</a></h2>
             <p>Japanese Dreamcasts sport the iconic original bright orange swirl emblem and include high-grade VA1/VA0 motherboards that feature full MIL-CD compatibility. Because Japanese consoles were cherished indoors and spared smoke damage, their laser pickups and power supplies remain exceptionally healthy.</p>
             <a class="read-more" href="sega-dreamcast-ntsc-j-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="ps2-slim-scph-90000-guide.html">PlayStation 2 Slim (SCPH-90000 Series Built-in PSU)</a></h2>
             <p>The final evolution of the PS2 (SCPH-90000) completely eliminated the bulky external power brick by engineering an ultra-compact internal power supply into the slim chassis. Japan also received exclusive designer colors like Ceramic White and Satin Silver that never reached US retail.</p>
             <a class="read-more" href="ps2-slim-scph-90000-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="game-boy-color-japan-exclusive-colors.html">Game Boy Color (Japan Exclusive Limited Edition Colorways)</a></h2>
             <p>Japan was blessed with the finest official Game Boy Color variations: Daiei Clear Orange, Daiei Clear Black, Lawson Clear Aqua Blue, and the Pokemon Center 3rd Anniversary Gold/Silver edition featuring Pikachu and Pichu artwork.</p>
             <a class="read-more" href="game-boy-color-japan-exclusive-colors.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Handhelds</span>
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="wonderswan-color-bandai-guide.html">Bandai WonderSwan Color (Gunpei Yokoi's Final Masterpiece)</a></h2>
             <p>Designed by legendary Game Boy creator Gunpei Yokoi, the WonderSwan Color was released exclusively in Japan. Running over 20 hours on a single AA battery, it hosts exclusive Square JRPGs (Final Fantasy I, II, IV) and Namco arcade masterpieces in stunning 16-bit color.</p>
             <a class="read-more" href="wonderswan-color-bandai-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="sega-saturn-skeleton-derby-guide.html">Sega Saturn 'This is Cool' Skeleton & Derby Stallion Editions</a></h2>
             <p>The pinnacle of 90s translucent industrial design! Japan received the iconic 'This is Cool' Skeleton Saturn (HST-0021) and the translucent Derby Stallion edition, featuring smoked acrylic bodies, metallic badging, and top-tier late-revision motherboards with reliable CD lasers.</p>
             <a class="read-more" href="sega-saturn-skeleton-derby-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
-            <h2><a href="nintendo-64-clear-red-blue-guide.html">Nintendo 64 Two-Tone Clear Blue & Clear Red (NUS-001 JPN)</a></h2>
-            <p>Unlike the solid single-color 'Funtastic' models sold in the West, Japan received the exquisite 'Two-Tone' series: Clear Blue (ocean blue top, milky frosted bottom) and Clear Red (crimson top, milky frosted bottom) featuring unmatched aesthetics at half the cost of US Watermelon/Ice Blue consoles.</p>
-            <a class="read-more" href="nintendo-64-clear-red-blue-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+            <h2><a href="pc-engine-duo-r-rx-guide.html">NEC PC Engine Duo-R & Duo-RX (CD-ROM2 All-in-One Console)</a></h2>
+            <p>While the North American TurboDuo is notoriously elusive and easily fetches $800+ in mediocre condition, the Japan-exclusive, late-model white PC Engine Duo-R (PI-TG7) and Duo-RX (PI-TG8) offer the ultimate CD-ROM2 gaming experience at a fraction of the price. Crucially, NEC redesigned the motherboard layout for these revised units, replacing the leak-prone surface-mount electrolytic capacitors of the original black Duo with vastly more reliable through-hole components, ensuring dramatically superior longevity and crystal-clear audio fidelity.</p>
+            <a class="read-more" href="pc-engine-duo-r-rx-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="pc-engine-coregrafx-guide.html">NEC PC Engine CoreGrafx & CoreGrafx II (PI-TG3 / PI-TG4)</a></h2>
             <p>While the original white PC Engine was RF-only, the CoreGrafx upgrade introduced factory A/V composite output in a compact slate-grey chassis with bright orange (CoreGrafx I) or blue (CoreGrafx II) accents, giving collectors the quintessential chiptune powerhouse.</p>
             <a class="read-more" href="pc-engine-coregrafx-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="panasonic-q-gamecube-dvd-guide.html">Panasonic Q GameCube & DVD Hybrid Player (SL-GC10)</a></h2>
             <p>The undisputed Holy Grail of Nintendo hardware collecting! Co-developed by Matsushita/Panasonic and Nintendo, the Q features a mirror-polished stainless steel housing, blue backlit LCD control screen, motorized DVD tray, and heavy-duty optical carrying handles.</p>
             <a class="read-more" href="panasonic-q-gamecube-dvd-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Retro Consoles</span>
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="neo-geo-aes-console-import-guide.html">SNK Neo Geo AES Advanced Entertainment System (Japanese Home Console)</a></h2>
             <p>The 'Rolls-Royce' of retro arcade gaming. While English US home consoles command upwards of $1,500+, pristine Japanese AES consoles with original cardboard packaging and genuine arcade stick controllers are vastly more accessible in Japan.</p>
             <a class="read-more" href="neo-geo-aes-console-import-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="n64-expansion-pak-nus-007-guide.html">Nintendo 64 Expansion Pak 4MB RAM Upgrade (NUS-007)</a></h2>
@@ -242,7 +269,7 @@
             <a class="read-more" href="n64-expansion-pak-nus-007-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="sega-saturn-3d-control-pad-guide.html">Sega Saturn 3D Control Pad (HSS-0137 Analog Controller)</a></h2>
@@ -250,15 +277,15 @@
             <a class="read-more" href="sega-saturn-3d-control-pad-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Accessories & Hardware</span>
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="dreamcast-vmu-limited-colors-guide.html">Sega Dreamcast Visual Memory Unit (Limited Japanese Colorways)</a></h2>
             <p>While the West received basic white and translucent blue VMUs, Japan was treated to a spectacular palette of limited editions: Sakura Taisen Cherry Blossom Pink, Clear Green, Smoke Grey, Godzilla Translucent Black, and Hello Kitty editions.</p>
             <a class="read-more" href="dreamcast-vmu-limited-colors-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="super-famicom-controller-oem-guide.html">Official Super Famicom Controller (SHVC-005 Four-Color Buttons)</a></h2>
@@ -266,15 +293,15 @@
             <a class="read-more" href="super-famicom-controller-oem-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Accessories & Hardware</span>
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="gamecube-broadband-adapter-dol-015.html">Nintendo GameCube Broadband Adapter (DOL-015 100Mbps Ethernet)</a></h2>
             <p>Essential for 8-player Mario Kart: Double Dash!! LAN parties, Phantasy Star Online, and streaming ISO files over Ethernet via Swiss homebrew. While US eBay prices exceed $130, Japanese units are roughly 40% cheaper.</p>
             <a class="read-more" href="gamecube-broadband-adapter-dol-015.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="hori-pad-mini-64-guide.html">Hori Pad Mini 64 (NUS-A-HM Competitive N64 Controller)</a></h2>
@@ -282,23 +309,23 @@
             <a class="read-more" href="hori-pad-mini-64-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Accessories & Hardware</span>
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="pocketstation-ps1-import-guide.html">Sony PocketStation (SCPH-4000 Miniature Handheld / Memory Card)</a></h2>
             <p>Released exclusively in Japan, the PocketStation is a miniature PDA memory card featuring a monochrome LCD, 5-button control pad, audio buzzer, and infrared port, unlocking exclusive companion minigames in Final Fantasy VIII (Chocobo World), Street Fighter Zero 3, and Spyro the Dragon.</p>
             <a class="read-more" href="pocketstation-ps1-import-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Accessories & Hardware</span>
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="game-boy-camera-printer-jpn-guide.html">Game Boy Camera & Pocket Printer (Pocket Camera Japan)</a></h2>
             <p>The Japanese 'Pocket Camera' features exclusive anime stamps, Pokemon borders, exclusive Mario minigames, and pastel shell colors (Clear Purple, Clear Red, Yellow) that were never released in Western retail.</p>
             <a class="read-more" href="game-boy-camera-printer-jpn-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Controllers & Gear">
             <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="ps2-multitap-scph-10090-guide.html">Official PlayStation 2 Multitap (SCPH-10090 Fat vs. SCPH-70120 Slim)</a></h2>
@@ -306,15 +333,15 @@
             <a class="read-more" href="ps2-multitap-scph-10090-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Accessories & Hardware</span>
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="sega-saturn-backup-ram-cartridge-guide.html">Official Sega Saturn Backup RAM Cartridge (Power Memory HSS-0138)</a></h2>
             <p>The Saturn's internal memory depends on an internal CR2032 battery that wipes all game saves when it dies. The official Sega Power Memory cartridge provides 512KB of non-volatile flash memory that stores your saves safely forever.</p>
             <a class="read-more" href="sega-saturn-backup-ram-cartridge-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="pokemon-heartgold-soulsilver-jpn-pokewalker.html">Pokémon HeartGold & SoulSilver (Complete in Big Box with Pokéwalker)</a></h2>
@@ -322,7 +349,7 @@
             <a class="read-more" href="pokemon-heartgold-soulsilver-jpn-pokewalker.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="mother-2-super-famicom-cib-guide.html">MOTHER 2: Gyiyg no Gyakushū / EarthBound (Super Famicom CIB)</a></h2>
@@ -330,7 +357,7 @@
             <a class="read-more" href="mother-2-super-famicom-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="super-metroid-super-famicom-cib-guide.html">Super Metroid (Super Famicom CIB - 100% English Language Native)</a></h2>
@@ -338,23 +365,23 @@
             <a class="read-more" href="super-metroid-super-famicom-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="radiant-silvergun-sega-saturn-guide.html">Radiant Silvergun (Sega Saturn - Treasure's Shmup Masterpiece)</a></h2>
             <p>Treasure's magnum opus vertical shooter was a Japanese Saturn exclusive. With mind-bending 7-weapon tactical mechanics, Hitoshi Sakimoto's orchestral soundtrack, and gorgeous 2D/3D anime cutscenes, it is the holy grail of Saturn shmups.</p>
             <a class="read-more" href="radiant-silvergun-sega-saturn-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="marvel-vs-capcom-2-dreamcast-jpn-guide.html">Marvel vs. Capcom 2: New Age of Heroes (Sega Dreamcast NTSC-J)</a></h2>
             <p>The US Dreamcast release of MvC2 sells for $150–$250+, while the original Japanese release (T-1212M) features the exact same tournament-standard Naomi arcade port, English voice lines, and gorgeous Capcom collector artwork for under $60!</p>
             <a class="read-more" href="marvel-vs-capcom-2-dreamcast-jpn-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
+        <div class="article-card" data-category="Collector Games">
             <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="zelda-ocarina-of-time-n64-cib-guide.html">The Legend of Zelda: Ocarina of Time (Nintendo 64 JDM CIB V1.0)</a></h2>
@@ -362,32 +389,32 @@
             <a class="read-more" href="zelda-ocarina-of-time-n64-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="custom-robo-v2-n64-cib-guide.html">Custom Robo V2 (Nintendo 64 JDM Exclusive CIB)</a></h2>
             <p>Developed by Noise and published by Nintendo, Custom Robo V2 is one of the greatest competitive 4-player arena brawlers ever created on the N64, and it was never released in the Western world!</p>
             <a class="read-more" href="custom-robo-v2-n64-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="f-zero-gx-gamecube-jpn-guide.html">F-ZERO GX (Nintendo GameCube NTSC-J - 100% English Native)</a></h2>
             <p>While US GameCube copies of F-Zero GX have soared over $100, the Japanese release (DOL-GFZJ-JPN) features the exact same mind-bending 60fps high-octane racing, full English interface, and gorgeous Japanese mini-DVD packaging for $25–$35!</p>
             <a class="read-more" href="f-zero-gx-gamecube-jpn-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="super-smash-bros-n64-japan-cib-guide.html">Super Smash Bros. 64 / Dairantō Smash Brothers (N64 JDM CIB)</a></h2>
             <p>The Japanese original release (ニンテンドウオールスター! 大乱闘スマッシュブラザーズ) features exclusive sound effects (like heavier, punchier hit impacts), Japanese cartoon comic box art, and sells for a third of the inflated US market price.</p>
             <a class="read-more" href="super-smash-bros-n64-japan-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
-        <div class="article-card">
-            <span class="badge">Action & Shmups</span>
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="castlevania-rondo-of-blood-pc-engine-cd.html">Castlevania: Rondo of Blood / Akumajō Dracula X: Chi no Rondo (PC Engine Super CD-ROM2)</a></h2>
             <p>Regarded by many retro critics as the greatest traditional Castlevania game ever made, Akumajō Dracula X: Chi no Rondo was released exclusively in Japan on PC Engine Super CD-ROM2 and never received a Western physical CD release!</p>
@@ -401,14 +428,71 @@
     </footer>
 
     <script>
-        function filterGuides() {
-            const query = document.getElementById('searchBox').value.toLowerCase();
+        let currentCategory = 'All';
+
+        function initTabs() {
             const cards = document.querySelectorAll('.article-card');
+            const counts = {
+                'All': cards.length,
+                'Consoles': 0,
+                'Handhelds': 0,
+                'Controllers & Gear': 0,
+                'Collector Games': 0
+            };
+
             cards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                card.style.display = text.includes(query) ? 'block' : 'none';
+                const cat = card.getAttribute('data-category');
+                if (counts.hasOwnProperty(cat)) {
+                    counts[cat]++;
+                }
+            });
+
+            document.querySelectorAll('.tab-badge').forEach(badge => {
+                const targetCat = badge.getAttribute('data-count-for');
+                if (counts.hasOwnProperty(targetCat)) {
+                    badge.textContent = '(' + counts[targetCat] + ')';
+                }
             });
         }
+
+        function setCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-category') === category);
+            });
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('searchBox').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.article-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                const cardText = card.innerText.toLowerCase();
+
+                const matchesCategory = (currentCategory === 'All' || cardCat === currentCategory);
+                const matchesSearch = (!query || cardText.includes(query));
+
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const noRes = document.getElementById('noResultsMessage');
+            if (noRes) {
+                noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+            applyFilters();
+        });
     </script>
 </body>
 </html>

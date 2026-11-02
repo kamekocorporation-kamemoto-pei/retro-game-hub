@@ -10,10 +10,23 @@
         header {{ text-align: center; margin-bottom: 32px; }}
         h1 {{ font-size: 2.2rem; color: #111827; margin-bottom: 8px; }}
         p.subtitle {{ color: #4b5563; font-size: 1.1rem; max-width: 680px; margin: 0 auto; }}
-        .filter-bar {{ display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 24px 0; }}
-        .search-input {{ width: 100%; max-width: 480px; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 1rem; display: block; margin: 0 auto 20px auto; }}
-        .article-card {{ background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s; }}
-        .article-card:hover {{ transform: translateY(-2px); }}
+        
+        .search-input {{ width: 100%; max-width: 520px; padding: 14px 20px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; display: block; margin: 0 auto 20px auto; outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: #ffffff; }}
+        .search-input:focus {{ border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }}
+        
+        .category-tabs {{ display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 28px auto; padding: 4px 0; max-width: 860px; }}
+        @media (max-width: 640px) {{
+            .category-tabs {{ justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }}
+        }}
+        .tab-btn {{ display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 9999px; background: #ffffff; color: #4b5563; font-size: 0.92rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }}
+        .tab-btn:hover {{ background: #f9fafb; border-color: #9ca3af; color: #111827; transform: translateY(-1px); }}
+        .tab-btn.active {{ background: #1d4ed8; border-color: #1d4ed8; color: #ffffff; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25); }}
+        .tab-badge {{ display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.78rem; font-weight: 700; background: #f3f4f6; color: #4b5563; transition: background 0.2s, color 0.2s; }}
+        .tab-btn:hover .tab-badge {{ background: #e5e7eb; color: #1f2937; }}
+        .tab-btn.active .tab-badge {{ background: rgba(255, 255, 255, 0.25); color: #ffffff; }}
+        
+        .article-card {{ background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s, box-shadow 0.2s; }}
+        .article-card:hover {{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.08); }}
         .badge {{ display: inline-block; background: #dbeafe; color: #1e40af; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; margin-bottom: 8px; }}
         .auth-tag {{ display: inline-block; background: #fef3c7; color: #b45309; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; margin-left: 6px; }}
         .article-card h2 {{ margin: 6px 0 10px 0; font-size: 1.35rem; }}
@@ -21,6 +34,8 @@
         .article-card h2 a:hover {{ text-decoration: underline; }}
         .read-more {{ display: inline-block; margin-top: 10px; font-weight: 600; color: #2563eb; text-decoration: none; }}
         .read-more:hover {{ text-decoration: underline; }}
+        
+        .no-results {{ display: none; text-align: center; padding: 48px 20px; background: #ffffff; border-radius: 12px; color: #6b7280; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }}
         footer {{ text-align: center; margin-top: 50px; color: #6b7280; font-size: 0.9rem; }}
     </style>
 </head>
@@ -30,7 +45,19 @@
         <p class="subtitle">100% Authentic Japanese Consoles, Mods & CIB Games. Every guide includes an Anti-Bootleg Verification Checklist and direct Buyee search filters.</p>
     </header>
 
-    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="filterGuides()">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., Duo-R, GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="applyFilters()">
+
+    <div class="category-tabs" id="categoryTabs" role="tablist">
+        <button type="button" class="tab-btn active" data-category="All" onclick="setCategory('All')">All <span class="tab-badge" data-count-for="All"></span></button>
+        <button type="button" class="tab-btn" data-category="Consoles" onclick="setCategory('Consoles')">Consoles <span class="tab-badge" data-count-for="Consoles"></span></button>
+        <button type="button" class="tab-btn" data-category="Handhelds" onclick="setCategory('Handhelds')">Handhelds <span class="tab-badge" data-count-for="Handhelds"></span></button>
+        <button type="button" class="tab-btn" data-category="Controllers & Gear" onclick="setCategory('Controllers & Gear')">Controllers &amp; Gear <span class="tab-badge" data-count-for="Controllers & Gear"></span></button>
+        <button type="button" class="tab-btn" data-category="Collector Games" onclick="setCategory('Collector Games')">Collector Games <span class="tab-badge" data-count-for="Collector Games"></span></button>
+    </div>
+
+    <div id="noResultsMessage" class="no-results">
+        <p>🔍 No matching guides found. Try another search term or switch categories.</p>
+    </div>
 
     <main id="guideList">
         {list_items}
@@ -41,14 +68,71 @@
     </footer>
 
     <script>
-        function filterGuides() {{
-            const query = document.getElementById('searchBox').value.toLowerCase();
+        let currentCategory = 'All';
+
+        function initTabs() {{
             const cards = document.querySelectorAll('.article-card');
+            const counts = {{
+                'All': cards.length,
+                'Consoles': 0,
+                'Handhelds': 0,
+                'Controllers & Gear': 0,
+                'Collector Games': 0
+            }};
+
             cards.forEach(card => {{
-                const text = card.innerText.toLowerCase();
-                card.style.display = text.includes(query) ? 'block' : 'none';
+                const cat = card.getAttribute('data-category');
+                if (counts.hasOwnProperty(cat)) {{
+                    counts[cat]++;
+                }}
+            }});
+
+            document.querySelectorAll('.tab-badge').forEach(badge => {{
+                const targetCat = badge.getAttribute('data-count-for');
+                if (counts.hasOwnProperty(targetCat)) {{
+                    badge.textContent = '(' + counts[targetCat] + ')';
+                }}
             }});
         }}
+
+        function setCategory(category) {{
+            currentCategory = category;
+            document.querySelectorAll('.tab-btn').forEach(btn => {{
+                btn.classList.toggle('active', btn.getAttribute('data-category') === category);
+            }});
+            applyFilters();
+        }}
+
+        function applyFilters() {{
+            const query = document.getElementById('searchBox').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.article-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {{
+                const cardCat = card.getAttribute('data-category');
+                const cardText = card.innerText.toLowerCase();
+
+                const matchesCategory = (currentCategory === 'All' || cardCat === currentCategory);
+                const matchesSearch = (!query || cardText.includes(query));
+
+                if (matchesCategory && matchesSearch) {{
+                    card.style.display = 'block';
+                    visibleCount++;
+                }} else {{
+                    card.style.display = 'none';
+                }}
+            }});
+
+            const noRes = document.getElementById('noResultsMessage');
+            if (noRes) {{
+                noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+            }}
+        }}
+
+        document.addEventListener('DOMContentLoaded', () => {{
+            initTabs();
+            applyFilters();
+        }});
     </script>
 </body>
 </html>
