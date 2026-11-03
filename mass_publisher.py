@@ -95,7 +95,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "."],
-        ["git", "commit", "-m", "Unify categories, add PC Engine Duo-R guide, and implement responsive category tabs with count badges"],
+        ["git", "commit", "-m", "Scale to 100 guides: Add 55 Tier-2 retro titles and implement responsive 24-item pagination"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:

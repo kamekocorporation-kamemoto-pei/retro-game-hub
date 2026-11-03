@@ -14,7 +14,7 @@
         .search-input { width: 100%; max-width: 520px; padding: 14px 20px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; display: block; margin: 0 auto 20px auto; outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: #ffffff; }
         .search-input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
         
-        .category-tabs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 28px auto; padding: 4px 0; max-width: 860px; }
+        .category-tabs { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 24px auto; padding: 4px 0; max-width: 860px; }
         @media (max-width: 640px) {
             .category-tabs { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
         }
@@ -24,6 +24,8 @@
         .tab-badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.78rem; font-weight: 700; background: #f3f4f6; color: #4b5563; transition: background 0.2s, color 0.2s; }
         .tab-btn:hover .tab-badge { background: #e5e7eb; color: #1f2937; }
         .tab-btn.active .tab-badge { background: rgba(255, 255, 255, 0.25); color: #ffffff; }
+        
+        .filter-summary { text-align: center; color: #6b7280; font-size: 0.95rem; font-weight: 500; margin-bottom: 22px; min-height: 24px; }
         
         .article-card { background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s, box-shadow 0.2s; }
         .article-card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.08); }
@@ -36,6 +38,14 @@
         .read-more:hover { text-decoration: underline; }
         
         .no-results { display: none; text-align: center; padding: 48px 20px; background: #ffffff; border-radius: 12px; color: #6b7280; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        .pagination-nav { display: flex; justify-content: center; align-items: center; gap: 6px; margin: 36px 0 24px 0; flex-wrap: wrap; }
+        .page-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 42px; padding: 0 14px; border: 1px solid #d1d5db; border-radius: 8px; background: #ffffff; color: #374151; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05); user-select: none; }
+        .page-btn:hover:not(:disabled) { background: #f3f4f6; border-color: #9ca3af; color: #111827; transform: translateY(-1px); }
+        .page-btn.active { background: #1d4ed8; border-color: #1d4ed8; color: #ffffff; box-shadow: 0 3px 8px rgba(29, 78, 216, 0.3); cursor: default; }
+        .page-btn:disabled { opacity: 0.45; cursor: not-allowed; background: #f9fafb; border-color: #e5e7eb; color: #9ca3af; transform: none; box-shadow: none; }
+        .page-ellipsis { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 42px; color: #9ca3af; font-weight: 600; font-size: 1.1rem; }
+        
         footer { text-align: center; margin-top: 50px; color: #6b7280; font-size: 0.9rem; }
     </style>
 </head>
@@ -45,7 +55,7 @@
         <p class="subtitle">100% Authentic Japanese Consoles, Mods & CIB Games. Every guide includes an Anti-Bootleg Verification Checklist and direct Buyee search filters.</p>
     </header>
 
-    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., Duo-R, GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="applyFilters()">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search 100 guides (e.g., Duo-R, GBA SP, Emerald, GameCube, Saturn)..." onkeyup="onSearchInput()">
 
     <div class="category-tabs" id="categoryTabs" role="tablist">
         <button type="button" class="tab-btn active" data-category="All" onclick="setCategory('All')">All <span class="tab-badge" data-count-for="All"></span></button>
@@ -54,6 +64,8 @@
         <button type="button" class="tab-btn" data-category="Controllers & Gear" onclick="setCategory('Controllers & Gear')">Controllers &amp; Gear <span class="tab-badge" data-count-for="Controllers & Gear"></span></button>
         <button type="button" class="tab-btn" data-category="Collector Games" onclick="setCategory('Collector Games')">Collector Games <span class="tab-badge" data-count-for="Collector Games"></span></button>
     </div>
+
+    <div id="filterSummary" class="filter-summary"></div>
 
     <div id="noResultsMessage" class="no-results">
         <p>🔍 No matching guides found. Try another search term or switch categories.</p>
@@ -421,13 +433,457 @@
             <a class="read-more" href="castlevania-rondo-of-blood-pc-engine-cd.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
         </div>
         
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="nintendo-gamecube-spice-orange-console.html">Nintendo GameCube Spice Orange Console (DOL-001 JPN)</a></h2>
+            <p>Spice Orange is one of the most celebrated console colorways in retro gaming history, yet it was sold as a standalone hardware release exclusively in Japan. Crucially, early Japanese Spice Orange units feature model number DOL-001 with the prized 480p Digital AV Out port, allowing pristine modern HDMI connectivity that later North American revisions stripped away.</p>
+            <a class="read-more" href="nintendo-gamecube-spice-orange-console.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="famicom-av-new-famicom-hvc-101.html">AV Famicom / New Famicom (HVC-101 Console)</a></h2>
+            <p>The original 1983 red-and-white Famicom only outputs noisy RF video on Japanese TV channels 95/96. The 1993 'AV Famicom' (HVC-101) completely solved this with a standard Nintendo multi-out port (supporting composite and S-Video), redesigned vertical PCB traces eliminating the notorious 'jailbar' interference, and detachable dog-bone ergonomic controllers.</p>
+            <a class="read-more" href="famicom-av-new-famicom-hvc-101.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="famicom-disk-system-hvc-022.html">Famicom Disk System (HVC-022 & RAM Adapter HVC-023)</a></h2>
+            <p>The Famicom Disk System gave the world Zelda, Metroid, and Castlevania with FM synthesis extra audio channels and battery-free rewriteable save files long before Western NES releases. It was never released outside Japan, making the authentic hardware mechanical whine and the distinct startup jingle an essential collector pilgrimage.</p>
+            <a class="read-more" href="famicom-disk-system-hvc-022.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="super-famicom-jr-shvc-101.html">Super Famicom Jr. (SHVC-101 Compact Redesign)</a></h2>
+            <p>Released in 1998 at the very twilight of the 16-bit era, the Super Famicom Jr. is revered by retro purists as the ultimate compact 1-chip chassis. Its consolidated CPU/PPU architecture delivers the sharpest pixel clarity of any official Nintendo hardware, making it the holy grail console for professional RGB/S-Video bypass modding.</p>
+            <a class="read-more" href="super-famicom-jr-shvc-101.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sega-mega-drive-model-1-va1-va6.html">Sega Mega Drive Model 1 (HAA-2510 High Definition Graphics)</a></h2>
+            <p>Japanese Mega Drive Model 1 units stamped with the gold 'High Definition Graphics - Custom Sound' arc house discrete Yamaha YM2612 FM synthesis chips and the legendary sign-magnitude DAC. When paired with the 3.5mm stereo headphone jack, they output the warmest, punchiest chiptune audio in 16-bit console history without the muddy distortion of later Genesis revisions.</p>
+            <a class="read-more" href="sega-mega-drive-model-1-va1-va6.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sega-mega-cd-2-hym-002.html">Sega Mega-CD 2 / Mega CD II (HAA-2912 Console Add-on)</a></h2>
+            <p>Western Sega CD 1 and 2 units are notorious for blown surface-mount thermal fuses (F1) and brittle plastic disc tray gears. The Japanese Mega-CD 2 (HAA-2912) offers significantly higher manufacturing build quality, a durable Sony/Mitsumi top-loading pickup, and native access to legendary Japanese exclusive CD soundtracks like Sonic CD's original vocal mix.</p>
+            <a class="read-more" href="sega-mega-cd-2-hym-002.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sega-saturn-model-1-grey.html">Sega Saturn Model 1 Grey Console (HST-3200 / HST-3210)</a></h2>
+            <p>The original launch-edition Japanese Sega Saturn features an iconic two-tone slate grey aesthetic with brilliant cyan and orange accent buttons that stands in stark contrast to the drab black Western shell. Model 1 units also feature dedicated disc-access and power LED indicators along with top-tier CD drive tracking assemblies.</p>
+            <a class="read-more" href="sega-saturn-model-1-grey.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="pc-engine-supergrafx-pi-tg5.html">NEC PC Engine SuperGrafx (PI-TG5 Console)</a></h2>
+            <p>With fewer than 75,000 units ever produced, the NEC SuperGrafx is one of the ultimate collectible console unicorns. Designed like an aggressive, military-grade engine block with twin VDC video processors for unprecedented multi-plane arcade scrolling, it was never released outside Japan and represents 16-bit hardware engineering at its most brazen.</p>
+            <a class="read-more" href="pc-engine-supergrafx-pi-tg5.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="pc-engine-duo-original-black.html">NEC PC Engine Duo (PI-TG6 Original Black Console)</a></h2>
+            <p>The original all-in-one Japanese PC Engine Duo launched in 1991 in a stunning stealth-black wedge profile with integrated headphone jack and volume dial. It integrated the Super System Card 3.0 hardware directly onto the motherboard, making it the most iconic collector centerpiece for NEC enthusiasts worldwide.</p>
+            <a class="read-more" href="pc-engine-duo-original-black.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="pc-engine-white-original-hucard.html">Original White PC Engine (PI-TG001 Console)</a></h2>
+            <p>Released in October 1987, the white PC Engine was the smallest home console ever made at the time, barely larger than two stacked CD cases. This minimalist architectural masterpiece is a pure time-capsule of Japanese late-80s tech elegance, offering blistering HuCard processing speeds and unmatched tactile nostalgic charm.</p>
+            <a class="read-more" href="pc-engine-white-original-hucard.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="playstation-ps-one-combo-lcd.html">Sony PS one & Official LCD Screen Combo (SCPH-100 / SCPH-130)</a></h2>
+            <p>The redesigned miniature Sony PS one paired with the official 5-inch TFT LCD monitor (SCPH-130) is the pinnacle of turn-of-the-millennium compact industrial design. Featuring crisp stereo speakers, brilliant color saturation, and headphone jacks, it transforms the entire PS1 library into a desktop and road-trip powerhouse.</p>
+            <a class="read-more" href="playstation-ps-one-combo-lcd.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="playstation-2-fat-scph-37000-50000.html">PlayStation 2 Fat Ocean Blue & Zen Black (SCPH-37000 / SCPH-50000)</a></h2>
+            <p>Japan was blessed with exclusive limited-edition translucent colored PlayStation 2 Fat consoles, most notably the mesmerizing 'Ocean Blue' (SCPH-37000 L) and 'Zen Black' (SCPH-37000 B). These premium fat models boast heavy internal expansion bays for internal hard drives (FreeHDBoot) and whisper-quiet cooling fans on SCPH-50000 series.</p>
+            <a class="read-more" href="playstation-2-fat-scph-37000-50000.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="neo-geo-cd-top-loading-front-loading.html">SNK Neo Geo CD (Top-Loading CD-T01 & Front-Loading Console)</a></h2>
+            <p>While Neo Geo AES cartridges cost thousands of dollars each, the Neo Geo CD delivers the exact same arcade-perfect SNK sprites and animations accompanied by mind-blowing CD-quality arranged soundtracks (AST). Buying the Japanese console opens up the entire SNK library at a tiny fraction of AES cartridge pricing.</p>
+            <a class="read-more" href="neo-geo-cd-top-loading-front-loading.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="bandai-playdia-quick-interactive-system.html">Bandai Playdia Quick Interactive System (BA-001 Console)</a></h2>
+            <p>The Bandai Playdia is one of the most eccentric pieces of 1990s Japanese tech history: an anime-focused multimedia CD-ROM system driven by a wireless infrared controller that docks directly into the console housing. It is the exclusive home to rare, fully voiced interactive animated episodes of Dragon Ball Z (The Plan to Eradicate the Saiyans) and Sailor Moon.</p>
+            <a class="read-more" href="bandai-playdia-quick-interactive-system.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Consoles">
+            <span class="badge">Consoles</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="casio-loopy-my-seal-computer.html">Casio Loopy: My Seal Computer (SV-100 Console)</a></h2>
+            <p>Released in October 1995 exclusively in Japan, the Casio Loopy holds a unique spot in video game history: it was marketed specifically to female gamers and featured a built-in full-color thermal sticker printer that printed instant stickers from in-game screenshots and custom avatar designers. It is an extraordinary historical piece of hardware engineering.</p>
+            <a class="read-more" href="casio-loopy-my-seal-computer.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="game-boy-light-gold-silver.html">Game Boy Light (MGB-101 Gold & Silver Backlit Editions)</a></h2>
+            <p>Released exclusively in Japan in 1998 just before the Game Boy Color, the Game Boy Light was Nintendo's only factory-produced backlit Game Boy model. Using a gorgeous, uniform indigo electroluminescent (EL) panel powered by just two AA batteries, it provides the definitive non-modded retro gaming experience in total darkness.</p>
+            <a class="read-more" href="game-boy-light-gold-silver.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="game-boy-pocket-clear-extreme-green.html">Game Boy Pocket (MGB-001 Japan Limited Skeleton Colors)</a></h2>
+            <p>Japan was treated to spectacular limited-run translucent editions of the slimmed-down Game Boy Pocket, including the coveted Toys 'R' Us Clear, Famitsu Model-F, and neon Extreme Green. In addition, Japanese MGB-001 units almost universally retained the essential red battery indicator LED that Western launch units infamously lacked.</p>
+            <a class="read-more" href="game-boy-pocket-clear-extreme-green.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="game-boy-advance-ips-mod-base.html">Game Boy Advance Original (AGB-001 Japanese Import Mod Bases)</a></h2>
+            <p>The original horizontal Game Boy Advance (AGB-001) is unanimously considered the most comfortable handheld ergonomic design Nintendo ever engineered, but its reflective screen is notoriously dark. Japanese imports are renowned for pristine motherboard PCB condition and immaculate button membranes, making them the world's premier candidates for modern IPS / ITA screen upgrades.</p>
+            <a class="read-more" href="game-boy-advance-ips-mod-base.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sega-game-gear-rayearth-limited.html">Sega Game Gear Magic Knight Rayearth Limited Edition (HGG-3214)</a></h2>
+            <p>The Magic Knight Rayearth limited edition Game Gear is one of the most stunning handheld editions ever produced, molded in brilliant cherry-red plastic with Clamp artwork and paired with a custom talisman mini-cartridge. Japanese units also house early revisions of Sega's high-contrast stereo sound hardware.</p>
+            <a class="read-more" href="sega-game-gear-rayearth-limited.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sega-nomad-japanese-genesis-mod.html">Sega Nomad Handheld (Japanese Mega Drive Import & Modded)</a></h2>
+            <p>While technically released in North America, the Nomad was engineered by Sega Japan and is actively sought by Japanese import modders who install modern LCD screens and Lithium-Ion battery packs. Japanese retro specialists frequently offer the cleanest custom-modded Nomads with region switches to play Japanese Mega Drive carts on the go.</p>
+            <a class="read-more" href="sega-nomad-japanese-genesis-mod.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="nec-pc-engine-gt-turboexpress.html">NEC PC Engine GT / TurboExpress (PI-TG6 Portable Console)</a></h2>
+            <p>The PC Engine GT is the Ferrari of 90s handhelds: a portable unit that directly played full-sized, uncompromised home console HuCard games on an active-matrix color LCD back in 1990. North American TurboExpress units routinely fetch $500–$800, whereas sourcing a Japanese GT offers identical, flawless architecture at far more competitive pricing.</p>
+            <a class="read-more" href="nec-pc-engine-gt-turboexpress.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="neo-geo-pocket-color-crystal-clear.html">Neo Geo Pocket Color Crystal Clear & Crystal Blue (SNK Handheld)</a></h2>
+            <p>SNK's Neo Geo Pocket Color features the single greatest directional control mechanism ever fitted to a handheld: a mechanical microswitch clicky thumbstick that offers genuine arcade-quality fighting execution. Japanese exclusive 'Crystal Clear' and 'Crystal Blue' transparent shells are the crown jewels of the NGPC ecosystem.</p>
+            <a class="read-more" href="neo-geo-pocket-color-crystal-clear.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="wonderswan-swan-crystal-sc-001.html">Bandai SwanCrystal (SCT-001 TFT LCD Final Hardware Model)</a></h2>
+            <p>Designed by the legendary Gunpei Yokoi, the WonderSwan culminated in the holy grail SwanCrystal (SCT-001) in 2002. Bandai replaced the slow, ghosting-prone FSTN screen with a lightning-fast active-matrix reflective TFT panel, completely eliminating motion blur and delivering vibrant pixel art with remarkable 15-hour battery life on a single AA.</p>
+            <a class="read-more" href="wonderswan-swan-crystal-sc-001.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="nintendo-dsi-ll-japan-ips.html">Nintendo DSi LL (TWL-001 Dual IPS Screen Japanese Edition)</a></h2>
+            <p>The Japanese Nintendo DSi LL features the largest, most gorgeous 4.2-inch dual IPS displays ever fitted to the original DS architecture. Unlike modern 3DS screens where IPS panels are an unpredictable lottery, 100% of Nintendo DSi LL units shipped with factory dual IPS screens, offering 1:1 pixel scaling for DS games with zero bilinear blur.</p>
+            <a class="read-more" href="nintendo-dsi-ll-japan-ips.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="new-nintendo-3ds-standard-faceplates.html">New Nintendo 3DS Standard Size (KTR-001 Kisekae Faceplate Edition)</a></h2>
+            <p>Nintendo infamously refused to release the regular-sized New Nintendo 3DS (KTR-001) as a general retail item in North America, forcing fans onto the bulky XL. Sourcing from Japan grants you the holy grail compact form factor, featuring interchangeable 'Kisekae Plate' faceplates, colored Super Famicom face buttons, and superior pixel density.</p>
+            <a class="read-more" href="new-nintendo-3ds-standard-faceplates.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="ps-vita-1000-oled-3g-wifi.html">PlayStation Vita 1000 OLED (PCH-1000 Sapphire Blue & Cosmic Red)</a></h2>
+            <p>The original 'Fat' PS Vita (PCH-1000) features a rich, deep-black Samsung OLED display that delivers unmatched contrast ratios compared to later LCD revisions. Japan received mesmerizing limited colors like 'Sapphire Blue' and 'Cosmic Red' that were never widely released in the West.</p>
+            <a class="read-more" href="ps-vita-1000-oled-3g-wifi.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="pokemon-mini-chikorita-smoochum.html">Nintendo Pokémon Mini (MIN-001 Chikorita Green & Smoochum Purple)</a></h2>
+            <p>Released in 2001, the Pokémon Mini is the smallest cartridge-based video game console Nintendo ever engineered. Featuring an LCD screen, built-in vibration rumble motor, real-time clock, and shock sensor accelerometer, it is an astonishing collectible marvel. Exclusive Japanese colors like Chikorita Green and Smoochum Purple are the ultimate Pokémon collector showcase.</p>
+            <a class="read-more" href="pokemon-mini-chikorita-smoochum.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Handhelds">
+            <span class="badge">Handhelds</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="game-and-watch-multi-screen-zelda-dk.html">Nintendo Game & Watch Multi Screen (Zelda & Donkey Kong Vintage)</a></h2>
+            <p>Gunpei Yokoi's multi-screen clamshell Game & Watch devices literally paved the engineering foundation for the Nintendo DS thirty years later. Legendary twin-screen titles like Zelda (ZL-65) and Donkey Kong (DK-52) are timeless museum pieces. Japanese collectors preserve these units in dry, humidity-controlled environments, yielding exceptionally crisp LCD polarizers.</p>
+            <a class="read-more" href="game-and-watch-multi-screen-zelda-dk.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="nintendo-64-hori-compact-joystick.html">Hori Fighting Stick 64 (HNS-07 Arcade Controller for N64)</a></h2>
+            <p>Standard N64 controllers are notoriously terrible for fighting games and arcade ports. The Japan-exclusive Hori Fighting Stick 64 (HNS-07) solved this with heavy-gauge steel construction, microswitch arcade stick lever, and an authentic 6-button Capcom/SNK layout perfect for Smash 64, Mortal Kombat, and Killer Instinct.</p>
+            <a class="read-more" href="nintendo-64-hori-compact-joystick.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="densha-de-go-controller-ps1-ps2-n64.html">Densha de GO! Official Train Controller (TCPP-20009 / TCPP-20011)</a></h2>
+            <p>Taito's Densha de GO! (Train Driving Simulation) is a cultural phenomenon in Japan, and playing it with a standard gamepad misses 90% of the immersion. The official Japanese dedicated controller replicates an actual Japanese commuter train cab, featuring a notched multi-stage master controller power throttle and pneumatic pressure brake lever.</p>
+            <a class="read-more" href="densha-de-go-controller-ps1-ps2-n64.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="famicom-3d-system-glasses-hvc-031.html">Famicom 3D System (HVC-031 Active Shutter Glasses & Scope)</a></h2>
+            <p>Years before the Virtual Boy, Nintendo launched true stereoscopic 3D gaming in 1987 with the Japan-exclusive Famicom 3D System. Using active liquid crystal shutter glasses synchronized to CRT scanlines via the HVC-032 adapter box, games like 3D Hot Rally, Falsion, and Attack Animal Gakuen deliver jaw-dropping depth of field.</p>
+            <a class="read-more" href="famicom-3d-system-glasses-hvc-031.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="super-famicom-mouse-shvc-027.html">Super Famicom Mouse & Hard Mousepad (SHVC-027 OEM Set)</a></h2>
+            <p>Originally bundled with Mario Paint, the official Super Famicom Mouse (SHVC-027) unlocks a whole hidden genre of 16-bit gaming: point-and-click adventure titles, SimCity, Lemmings, and Mario & Wario. Japanese listings frequently include the textured plastic hard mousepad and original plastic snap-case.</p>
+            <a class="read-more" href="super-famicom-mouse-shvc-027.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="super-game-boy-2-shvc-042.html">Super Game Boy 2 (SHVC-042 Translucent Blue with Link Port)</a></h2>
+            <p>The original Super Game Boy had a serious engineering flaw: it clocked games roughly 2.4% too fast because it tapped into the SNES system oscillator. The Japan-exclusive Super Game Boy 2 (SHVC-042) completely fixed this with a dedicated, accurate crystal oscillator, a built-in Game Boy Link Port for Pokémon trading, and an awesome translucent icy-blue shell.</p>
+            <a class="read-more" href="super-game-boy-2-shvc-042.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="saturn-virtua-stick-pro-hss-0130.html">Sega Saturn Virtua Stick Pro (HSS-0130 Dual Astro City Panel)</a></h2>
+            <p>The Sega Saturn Virtua Stick Pro (HSS-0130) is the undisputed king of home arcade controllers: a colossal 12-pound, two-player steel desk console molded directly to match Sega's legendary Astro City arcade cabinet. It provides genuine dual-stick arcade perfection for Virtua Fighter, Street Fighter Zero 3, and Radiant Silvergun.</p>
+            <a class="read-more" href="saturn-virtua-stick-pro-hss-0130.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="dreamcast-arcade-stick-hkt-7300.html">Sega Dreamcast Arcade Stick (HKT-7300 Green Goblin OEM)</a></h2>
+            <p>Affectionately dubbed the 'Green Goblin' by the competitive fighting game community, the Japanese Sega Dreamcast Arcade Stick (HKT-7300) features a rock-solid heavy metal base, striking green-and-grey aesthetic, and microswitch components engineered to withstand Marvel vs. Capcom 2 and Street Fighter III: 3rd Strike marathons.</p>
+            <a class="read-more" href="dreamcast-arcade-stick-hkt-7300.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="dreamcast-fishing-controller-hkt-7601.html">Sega Dreamcast Fishing Controller (HKT-7601 Reel Controller)</a></h2>
+            <p>Sega's Dreamcast Fishing Controller (HKT-7601) is one of the most delightfully innovative accessories ever conceived. Equipped with an ergonomic casting handle, rotating retrieval reel, and built-in motion accelerometer, it not only creates pure arcade magic for Sega Bass Fishing, but hilariously acts as a secret weapon for Soulcalibur and Virtua Tennis!</p>
+            <a class="read-more" href="dreamcast-fishing-controller-hkt-7601.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="beatmania-iidx-controller-ps2-oem.html">Konami Beatmania IIDX Official Controller (RU038 PS2 Edition)</a></h2>
+            <p>Konami's Beatmania IIDX is the gold standard of arcade rhythm games. The official Japanese PS2 controller (RU038) features a rotatable turntable platter and 7 reversible microswitch keys that can be detached and flipped 180 degrees to switch between 1P and 2P arcade turntable layouts.</p>
+            <a class="read-more" href="beatmania-iidx-controller-ps2-oem.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="popn-music-controller-ps1-ps2.html">Konami Pop'n Music Dedicated Controller (RU018 / RU025 9-Button)</a></h2>
+            <p>Playing Pop'n Music on a standard gamepad is virtually impossible at higher difficulties. The official Japanese dedicated controller (RU018/RU025) provides the full 9-button dome layout color-coded in yellow, white, green, and blue, delivering authentic arcade rhythm coordination right on your living room table.</p>
+            <a class="read-more" href="popn-music-controller-ps1-ps2.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="taiko-no-tatsujin-tatacon-ps2.html">Namco Taiko no Tatsujin Tatacon Drum Controller (PS2 Japanese OEM)</a></h2>
+            <p>Namco's Taiko no Tatsujin (Drum Master) is pure joy, but the true arcade experience demands the tactile strike of drumsticks (Bachi) against the Tatacon drum. Sourcing the Japanese original PS2 drum controller provides authentic piezo sensors split between center drum-head strikes (Don) and rim hits (Ka).</p>
+            <a class="read-more" href="taiko-no-tatsujin-tatacon-ps2.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Controllers & Gear">
+            <span class="badge">Controllers & Gear</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="gamecube-component-cable-dol-010.html">Nintendo GameCube Official Component Video Cable (DOL-010)</a></h2>
+            <p>The official Nintendo GameCube Component Cable (DOL-010) is one of the most legendary retro video cables ever manufactured. Built with an internal proprietary Macronix DAC chip molded inside the connector housing, it delivers pure 480p progressive scan video. Sold exclusively through Nintendo's Japanese online store, genuine OEM cables are revered collector showpieces.</p>
+            <a class="read-more" href="gamecube-component-cable-dol-010.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="sin-and-punishment-n64-cib-guide.html">Sin and Punishment: Successor to the Earth (罪と罰 地球の継承者 N64 CIB)</a></h2>
+            <p>Developed by Treasure and Nintendo, Sin and Punishment is arguably the single greatest action shooter on the Nintendo 64. Released exclusively in Japan in late 2000, the game actually features native, full English voice acting out of the box! Japanese CIB copies with the stunning foil-accented box art are absolute collector essentials.</p>
+            <a class="read-more" href="sin-and-punishment-n64-cib-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="bangai-o-n64-dreamcast-jp-guide.html">Bakuretsu Muteki Bangai-O (爆裂無敵 バンガイオー N64 & Dreamcast CIB)</a></h2>
+            <p>Treasure's Bangai-O is a hyper-kinetic, 400-missile omnidirectional fireworks spectacle. Only 10,000 copies of the original Nintendo 64 cartridge were ever pressed in Japan, making the N64 version one of the most legendary collector grails in existence, while the Dreamcast port delivers silky smooth 60fps arcade bliss.</p>
+            <a class="read-more" href="bangai-o-n64-dreamcast-jp-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="shining-force-iii-scenarios-sega-saturn.html">Shining Force III Trilogy: Scenarios 1, 2, 3 & Premium Disc (Sega Saturn)</a></h2>
+            <p>Camelot's Shining Force III is one of the crowning achievements of tactical RPG history. While the West only received Scenario 1, Japan received the full, mind-blowing epic: Scenario 2 (Medion), Scenario 3 (Julian), and the legendary mail-away 'Premium Disc'. Sourcing the full Japanese 4-disc set is the only way to complete the grand narrative.</p>
+            <a class="read-more" href="shining-force-iii-scenarios-sega-saturn.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="panzer-dragoon-saga-azel-saturn-jp.html">Azel: Panzer Dragoon RPG (アゼル -パンツァードラグーンRPG- 4-Disc CIB)</a></h2>
+            <p>North American copies of Panzer Dragoon Saga are virtually unobtainable, regularly demanding $1,200 to $1,500. Sourcing the original Japanese release, 'Azel: Panzer Dragoon RPG', gives you the exact same magnificent 4-disc cinematic masterpiece, gorgeous foil slipcase box art, and art booklet for roughly one-tenth the Western price.</p>
+            <a class="read-more" href="panzer-dragoon-saga-azel-saturn-jp.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="suikoden-ii-ps1-cib-japanese-guide.html">Genso Suikoden II (幻想水滸伝II PS1 Authentic Konami CIB with Obi)</a></h2>
+            <p>Konami's Suikoden II is universally praised as one of the finest turn-based JRPGs of all time. North American PS1 copies routinely fetch over $300, but the Japanese original can be acquired in immaculate collector condition with its gorgeous manual, character art cards, and holographic spine card for under $40.</p>
+            <a class="read-more" href="suikoden-ii-ps1-cib-japanese-guide.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="snatcher-sega-cd-pc-engine-cd-jp.html">Snatcher (スナッチャー PC Engine Super CD-ROM2 & Saturn CIB)</a></h2>
+            <p>Hideo Kojima's cyberpunk masterpiece Snatcher on English Sega CD is a multi-thousand-dollar unobtainable relic. The definitive Japanese PC Engine Super CD-ROM2 and Sega Saturn releases feature the complete, uncensored story, glorious redbook synth-wave audio, and iconic anime cutscenes at a sensible price point.</p>
+            <a class="read-more" href="snatcher-sega-cd-pc-engine-cd-jp.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="policenauts-3do-saturn-ps1-cib.html">Policenauts (ポリスノーツ 3DO, Saturn & PS1 Multi-Disc CIB)</a></h2>
+            <p>Following Snatcher, Hideo Kojima wrote and directed Policenauts, an astonishing cinematic sci-fi police drama that was never officially localized in the West. Sourcing the Japanese 3DO, Saturn, or PS1 releases grants you the complete boxed physical masterwork, accompanied by the iconic pilot handbook, art booklet, and CD slipcase.</p>
+            <a class="read-more" href="policenauts-3do-saturn-ps1-cib.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="moon-remix-rpg-adventure-ps1-cib.html">Moon: Remix RPG Adventure (PS1 Authentic Love-de-Lic CIB with Obi)</a></h2>
+            <p>Before Undertale, there was Moon: Remix RPG Adventure. Created in 1997 by former Square developers forming Love-de-Lic, Moon turned JRPG tropes on their head: you wander a fantasy world saving the souls of animals that an arrogant 'Hero' slaughtered. The original Japanese PS1 physical release is a legendary cult masterpiece of avant-garde game design.</p>
+            <a class="read-more" href="moon-remix-rpg-adventure-ps1-cib.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="garou-mark-of-the-wolves-dreamcast-neo-geo.html">Garou: Mark of the Wolves (餓狼 MARK OF THE WOLVES Dreamcast & AES)</a></h2>
+            <p>Garou: Mark of the Wolves is universally acknowledged alongside Third Strike as the absolute pinnacle of 2D sprite fighting games. With Neo Geo AES cartridges commanding an astronomical $2,000+, the Japanese Sega Dreamcast release delivers arcade-perfect T.O.P. system combat, buttery animations, and CD audio at an accessible price point.</p>
+            <a class="read-more" href="garou-mark-of-the-wolves-dreamcast-neo-geo.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="street-fighter-zero-3-saikyo-saturn.html">Street Fighter Zero 3 (ストリートファイターZERO3 Saturn 4MB Expansion CIB)</a></h2>
+            <p>The Sega Saturn port of Street Fighter Zero 3 is an immortal technical flex: utilizing the 4MB Extended RAM cartridge, Capcom delivered an arcade-perfect port with zero cut frames of animation, zero load times between rounds, and full tag-team and World Tour modes that vastly surpassed the compromised PlayStation port.</p>
+            <a class="read-more" href="street-fighter-zero-3-saikyo-saturn.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="dangun-feveron-sega-saturn-ps4.html">DoDonPachi & Dangun Feveron (怒首領蜂 & 弾銃フィーバロン Cave Shmups)</a></h2>
+            <p>Cave is the undisputed demigod of manic bullet-hell (Danmaku) shoot-'em-ups. Classics like DoDonPachi (怒首領蜂) and Dangun Feveron on Japanese Sega Saturn and PS1 feature incredible arcade vertical (TATE) display modes, thumping techno soundtracks, and thousands of neon bullets dancing across CRT scanlines.</p>
+            <a class="read-more" href="dangun-feveron-sega-saturn-ps4.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="dragon-quest-v-super-famicom-cib.html">Dragon Quest V: Tenkū no Hanayome (ドラゴンクエストV SFC CIB with Map)</a></h2>
+            <p>Dragon Quest V is a cultural landmark: a multi-generational epic where you grow from child to father, choose a bride, and tame wild monsters years before Pokémon existed. Sourcing the pristine Super Famicom original in its vibrant Toriyama-illustrated box complete with the fold-out world map is the quintessential Japanese RPG collector grail.</p>
+            <a class="read-more" href="dragon-quest-v-super-famicom-cib.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="fire-emblem-thracia-776-sfc-cib.html">Fire Emblem: Thracia 776 (ファイアーエムブレム トラキア776 SFC Rare CIB)</a></h2>
+            <p>Released in late 1999 and 2000 at the very death of the Super Famicom, Thracia 776 is the undisputed holy grail of the entire Fire Emblem franchise. Sold originally via Nintendo Power flash-ROM rewrite kiosks and later in tiny cartridge quantities, this masterclass in brutal tactical perfection is one of the rarest 16-bit games in history.</p>
+            <a class="read-more" href="fire-emblem-thracia-776-sfc-cib.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="chocobo-dungeon-2-ps1-cib-figure.html">Chocobo's Dungeon 2 (チョコボの不思議なダンジョン2 PS1 CIB with Memory Card)</a></h2>
+            <p>Square's Mystery Dungeon spin-offs are pure golden-era comfort gaming. The Japanese release of Chocobo's Dungeon 2 came packed with incredible bonuses, including the iconic 'Fushigi Data Disc' featuring save files for upcoming Square titans like Final Fantasy VIII, making the Japanese physical package a true time capsule.</p>
+            <a class="read-more" href="chocobo-dungeon-2-ps1-cib-figure.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
+        <div class="article-card" data-category="Collector Games">
+            <span class="badge">Collector Games</span>
+            <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
+            <h2><a href="seiken-densetsu-3-trials-of-mana-sfc.html">Seiken Densetsu 3 / Trials of Mana (聖剣伝説3 SFC CIB with Map/Cards)</a></h2>
+            <p>Square's Seiken Densetsu 3 is widely considered the zenith of 16-bit action RPG beauty: mind-boggling hi-res sprite art, six branching character storylines, and Hiroki Kikuta's breathtaking symphonic soundtrack. Never released in the West during the 16-bit era, the authentic Japanese boxed package with foil manual is an absolute monument of gaming history.</p>
+            <a class="read-more" href="seiken-densetsu-3-trials-of-mana-sfc.html">Read Authenticity Guide & Browse Live Listings &rarr;</a>
+        </div>
+        
     </main>
+
+    <nav id="paginationNav" class="pagination-nav" aria-label="Guides Pagination"></nav>
 
     <footer>
         <p>&copy; 2026 JDM Retro Gaming Import Hub. Built for collectors to avoid counterfeits and source directly from Japan.</p>
     </footer>
 
     <script>
+        const ITEMS_PER_PAGE = 24;
+        let currentPage = 1;
         let currentCategory = 'All';
 
         function initTabs() {
@@ -455,19 +911,34 @@
             });
         }
 
+        function onSearchInput() {
+            currentPage = 1;
+            applyFilters();
+        }
+
         function setCategory(category) {
             currentCategory = category;
+            currentPage = 1;
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-category') === category);
             });
             applyFilters();
         }
 
+        function goToPage(page) {
+            currentPage = page;
+            applyFilters();
+            const searchBox = document.getElementById('searchBox');
+            if (searchBox) {
+                searchBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
         function applyFilters() {
             const query = document.getElementById('searchBox').value.trim().toLowerCase();
-            const cards = document.querySelectorAll('.article-card');
-            let visibleCount = 0;
-
+            const cards = Array.from(document.querySelectorAll('.article-card'));
+            
+            const matchingCards = [];
             cards.forEach(card => {
                 const cardCat = card.getAttribute('data-category');
                 const cardText = card.innerText.toLowerCase();
@@ -476,17 +947,75 @@
                 const matchesSearch = (!query || cardText.includes(query));
 
                 if (matchesCategory && matchesSearch) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
+                    matchingCards.push(card);
                 }
+                card.style.display = 'none';
             });
 
+            const totalMatches = matchingCards.length;
             const noRes = document.getElementById('noResultsMessage');
-            if (noRes) {
-                noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+            const summary = document.getElementById('filterSummary');
+            const nav = document.getElementById('paginationNav');
+
+            if (totalMatches === 0) {
+                if (noRes) noRes.style.display = 'block';
+                if (summary) summary.textContent = 'Found 0 matching guides';
+                if (nav) {
+                    nav.innerHTML = '';
+                    nav.style.display = 'none';
+                }
+                return;
             }
+
+            if (noRes) noRes.style.display = 'none';
+
+            const totalPages = Math.ceil(totalMatches / ITEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalMatches);
+
+            for (let i = startIndex; i < endIndex; i++) {
+                matchingCards[i].style.display = 'block';
+            }
+
+            if (summary) {
+                summary.textContent = 'Showing ' + (startIndex + 1) + '–' + endIndex + ' of ' + totalMatches + ' guides' + (currentCategory !== 'All' ? ' in ' + currentCategory : '');
+            }
+
+            renderPagination(totalMatches, totalPages);
+        }
+
+        function renderPagination(totalMatches, totalPages) {
+            const nav = document.getElementById('paginationNav');
+            if (!nav) return;
+
+            if (totalPages <= 1) {
+                nav.innerHTML = '';
+                nav.style.display = 'none';
+                return;
+            }
+
+            nav.style.display = 'flex';
+            let html = '';
+
+            const prevDisabled = currentPage === 1 ? 'disabled' : '';
+            html += '<button type="button" class="page-btn" ' + prevDisabled + ' onclick="goToPage(' + (currentPage - 1) + ')" aria-label="Previous Page">&larr; Prev</button>';
+
+            for (let p = 1; p <= totalPages; p++) {
+                if (p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) {
+                    const activeClass = p === currentPage ? 'active' : '';
+                    html += '<button type="button" class="page-btn ' + activeClass + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+                } else if (p === currentPage - 3 || p === currentPage + 3) {
+                    html += '<span class="page-ellipsis">&hellip;</span>';
+                }
+            }
+
+            const nextDisabled = currentPage === totalPages ? 'disabled' : '';
+            html += '<button type="button" class="page-btn" ' + nextDisabled + ' onclick="goToPage(' + (currentPage + 1) + ')" aria-label="Next Page">Next &rarr;</button>';
+
+            nav.innerHTML = html;
         }
 
         document.addEventListener('DOMContentLoaded', () => {

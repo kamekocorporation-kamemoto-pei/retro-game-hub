@@ -14,7 +14,7 @@
         .search-input {{ width: 100%; max-width: 520px; padding: 14px 20px; border: 2px solid #d1d5db; border-radius: 10px; font-size: 1.05rem; display: block; margin: 0 auto 20px auto; outline: none; transition: border-color 0.2s, box-shadow 0.2s; background: #ffffff; }}
         .search-input:focus {{ border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }}
         
-        .category-tabs {{ display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 28px auto; padding: 4px 0; max-width: 860px; }}
+        .category-tabs {{ display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 24px auto; padding: 4px 0; max-width: 860px; }}
         @media (max-width: 640px) {{
             .category-tabs {{ justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }}
         }}
@@ -24,6 +24,8 @@
         .tab-badge {{ display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 0.78rem; font-weight: 700; background: #f3f4f6; color: #4b5563; transition: background 0.2s, color 0.2s; }}
         .tab-btn:hover .tab-badge {{ background: #e5e7eb; color: #1f2937; }}
         .tab-btn.active .tab-badge {{ background: rgba(255, 255, 255, 0.25); color: #ffffff; }}
+        
+        .filter-summary {{ text-align: center; color: #6b7280; font-size: 0.95rem; font-weight: 500; margin-bottom: 22px; min-height: 24px; }}
         
         .article-card {{ background: #ffffff; padding: 26px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; transition: transform 0.2s, box-shadow 0.2s; }}
         .article-card:hover {{ transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.08); }}
@@ -36,6 +38,14 @@
         .read-more:hover {{ text-decoration: underline; }}
         
         .no-results {{ display: none; text-align: center; padding: 48px 20px; background: #ffffff; border-radius: 12px; color: #6b7280; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }}
+        
+        .pagination-nav {{ display: flex; justify-content: center; align-items: center; gap: 6px; margin: 36px 0 24px 0; flex-wrap: wrap; }}
+        .page-btn {{ display: inline-flex; align-items: center; justify-content: center; min-width: 42px; height: 42px; padding: 0 14px; border: 1px solid #d1d5db; border-radius: 8px; background: #ffffff; color: #374151; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px rgba(0,0,0,0.05); user-select: none; }}
+        .page-btn:hover:not(:disabled) {{ background: #f3f4f6; border-color: #9ca3af; color: #111827; transform: translateY(-1px); }}
+        .page-btn.active {{ background: #1d4ed8; border-color: #1d4ed8; color: #ffffff; box-shadow: 0 3px 8px rgba(29, 78, 216, 0.3); cursor: default; }}
+        .page-btn:disabled {{ opacity: 0.45; cursor: not-allowed; background: #f9fafb; border-color: #e5e7eb; color: #9ca3af; transform: none; box-shadow: none; }}
+        .page-ellipsis {{ display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 42px; color: #9ca3af; font-weight: 600; font-size: 1.1rem; }}
+        
         footer {{ text-align: center; margin-top: 50px; color: #6b7280; font-size: 0.9rem; }}
     </style>
 </head>
@@ -45,7 +55,7 @@
         <p class="subtitle">100% Authentic Japanese Consoles, Mods & CIB Games. Every guide includes an Anti-Bootleg Verification Checklist and direct Buyee search filters.</p>
     </header>
 
-    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search guides (e.g., Duo-R, GBA SP, Pokemon, GameCube, Saturn)..." onkeyup="applyFilters()">
+    <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search 100 guides (e.g., Duo-R, GBA SP, Emerald, GameCube, Saturn)..." onkeyup="onSearchInput()">
 
     <div class="category-tabs" id="categoryTabs" role="tablist">
         <button type="button" class="tab-btn active" data-category="All" onclick="setCategory('All')">All <span class="tab-badge" data-count-for="All"></span></button>
@@ -55,6 +65,8 @@
         <button type="button" class="tab-btn" data-category="Collector Games" onclick="setCategory('Collector Games')">Collector Games <span class="tab-badge" data-count-for="Collector Games"></span></button>
     </div>
 
+    <div id="filterSummary" class="filter-summary"></div>
+
     <div id="noResultsMessage" class="no-results">
         <p>🔍 No matching guides found. Try another search term or switch categories.</p>
     </div>
@@ -63,11 +75,15 @@
         {list_items}
     </main>
 
+    <nav id="paginationNav" class="pagination-nav" aria-label="Guides Pagination"></nav>
+
     <footer>
         <p>&copy; 2026 JDM Retro Gaming Import Hub. Built for collectors to avoid counterfeits and source directly from Japan.</p>
     </footer>
 
     <script>
+        const ITEMS_PER_PAGE = 24;
+        let currentPage = 1;
         let currentCategory = 'All';
 
         function initTabs() {{
@@ -95,19 +111,34 @@
             }});
         }}
 
+        function onSearchInput() {{
+            currentPage = 1;
+            applyFilters();
+        }}
+
         function setCategory(category) {{
             currentCategory = category;
+            currentPage = 1;
             document.querySelectorAll('.tab-btn').forEach(btn => {{
                 btn.classList.toggle('active', btn.getAttribute('data-category') === category);
             }});
             applyFilters();
         }}
 
+        function goToPage(page) {{
+            currentPage = page;
+            applyFilters();
+            const searchBox = document.getElementById('searchBox');
+            if (searchBox) {{
+                searchBox.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+            }}
+        }}
+
         function applyFilters() {{
             const query = document.getElementById('searchBox').value.trim().toLowerCase();
-            const cards = document.querySelectorAll('.article-card');
-            let visibleCount = 0;
-
+            const cards = Array.from(document.querySelectorAll('.article-card'));
+            
+            const matchingCards = [];
             cards.forEach(card => {{
                 const cardCat = card.getAttribute('data-category');
                 const cardText = card.innerText.toLowerCase();
@@ -116,17 +147,75 @@
                 const matchesSearch = (!query || cardText.includes(query));
 
                 if (matchesCategory && matchesSearch) {{
-                    card.style.display = 'block';
-                    visibleCount++;
-                }} else {{
-                    card.style.display = 'none';
+                    matchingCards.push(card);
                 }}
+                card.style.display = 'none';
             }});
 
+            const totalMatches = matchingCards.length;
             const noRes = document.getElementById('noResultsMessage');
-            if (noRes) {{
-                noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+            const summary = document.getElementById('filterSummary');
+            const nav = document.getElementById('paginationNav');
+
+            if (totalMatches === 0) {{
+                if (noRes) noRes.style.display = 'block';
+                if (summary) summary.textContent = 'Found 0 matching guides';
+                if (nav) {{
+                    nav.innerHTML = '';
+                    nav.style.display = 'none';
+                }}
+                return;
             }}
+
+            if (noRes) noRes.style.display = 'none';
+
+            const totalPages = Math.ceil(totalMatches / ITEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalMatches);
+
+            for (let i = startIndex; i < endIndex; i++) {{
+                matchingCards[i].style.display = 'block';
+            }}
+
+            if (summary) {{
+                summary.textContent = 'Showing ' + (startIndex + 1) + '–' + endIndex + ' of ' + totalMatches + ' guides' + (currentCategory !== 'All' ? ' in ' + currentCategory : '');
+            }}
+
+            renderPagination(totalMatches, totalPages);
+        }}
+
+        function renderPagination(totalMatches, totalPages) {{
+            const nav = document.getElementById('paginationNav');
+            if (!nav) return;
+
+            if (totalPages <= 1) {{
+                nav.innerHTML = '';
+                nav.style.display = 'none';
+                return;
+            }}
+
+            nav.style.display = 'flex';
+            let html = '';
+
+            const prevDisabled = currentPage === 1 ? 'disabled' : '';
+            html += '<button type="button" class="page-btn" ' + prevDisabled + ' onclick="goToPage(' + (currentPage - 1) + ')" aria-label="Previous Page">&larr; Prev</button>';
+
+            for (let p = 1; p <= totalPages; p++) {{
+                if (p === 1 || p === totalPages || (p >= currentPage - 2 && p <= currentPage + 2)) {{
+                    const activeClass = p === currentPage ? 'active' : '';
+                    html += '<button type="button" class="page-btn ' + activeClass + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+                }} else if (p === currentPage - 3 || p === currentPage + 3) {{
+                    html += '<span class="page-ellipsis">&hellip;</span>';
+                }}
+            }}
+
+            const nextDisabled = currentPage === totalPages ? 'disabled' : '';
+            html += '<button type="button" class="page-btn" ' + nextDisabled + ' onclick="goToPage(' + (currentPage + 1) + ')" aria-label="Next Page">Next &rarr;</button>';
+
+            nav.innerHTML = html;
         }}
 
         document.addEventListener('DOMContentLoaded', () => {{
