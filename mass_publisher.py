@@ -68,6 +68,14 @@ def generate_sitemap(articles, current_date):
         f.write(sitemap_content)
     print(f"sitemap.xml を生成しました（合計 {len(articles) + 1} URL）")
 
+GSC_VERIFICATION_FILE = "googlef37282339517c341.html"
+GSC_VERIFICATION_CONTENT = "google-site-verification: googlef37282339517c341.html"
+
+def ensure_gsc_verification():
+    """Google Search Consoleの所有権確認用HTMLファイルを自動維持・出力"""
+    with open(GSC_VERIFICATION_FILE, "w", encoding="utf-8") as f:
+        f.write(GSC_VERIFICATION_CONTENT)
+
 def generate_robots_txt():
     """検索エンジンクローラー向けの robots.txt を生成"""
     robots_content = f"""User-agent: *
@@ -141,9 +149,10 @@ def build_site():
             current_date=current_date
         ))
 
-    # sitemap.xml と robots.txt の自動生成
+    # sitemap.xml, robots.txt, Google Search Console確認ファイルの自動生成
     generate_sitemap(articles, current_date)
     generate_robots_txt()
+    ensure_gsc_verification()
 
 def run_git_commands():
     commands = [
