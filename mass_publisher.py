@@ -2,10 +2,12 @@ import os
 import csv
 import subprocess
 import urllib.parse
+from datetime import datetime
 
 REPO_URL = "https://github.com/kamekocorporation-kamemoto-pei/retro-game-hub.git"
 BRANCH = "main"
 CONFIG_FILE = "affiliate_config.txt"
+SITE_URL = "https://kamekocorporation-kamemoto-pei.github.io/retro-game-hub"
 
 def get_amazon_tag():
     """ローカル設定ファイルからストアIDを安全に読み込む"""
@@ -40,6 +42,43 @@ def make_amazon_url(query_en, amazon_tag):
         return f"{base_url}&tag={urllib.parse.quote(amazon_tag)}"
     return base_url
 
+def generate_sitemap(articles, current_date):
+    """Google検索インデックス用の sitemap.xml を標準規格で生成"""
+    urls_xml = f"""  <url>
+    <loc>{SITE_URL}/</loc>
+    <lastmod>{current_date}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>\n"""
+    
+    for row in articles:
+        urls_xml += f"""  <url>
+    <loc>{SITE_URL}/{row['slug']}.html</loc>
+    <lastmod>{current_date}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>\n"""
+
+    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls_xml.rstrip()}
+</urlset>
+"""
+    with open("sitemap.xml", "w", encoding="utf-8") as f:
+        f.write(sitemap_content)
+    print(f"sitemap.xml を生成しました（合計 {len(articles) + 1} URL）")
+
+def generate_robots_txt():
+    """検索エンジンクローラー向けの robots.txt を生成"""
+    robots_content = f"""User-agent: *
+Allow: /
+
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+    with open("robots.txt", "w", encoding="utf-8") as f:
+        f.write(robots_content)
+    print("robots.txt を生成しました")
+
 def build_site():
     csv_path = os.path.join("data", "retro_games.csv")
     article_tpl_path = os.path.join("templates", "article_template.html")
@@ -59,8 +98,11 @@ def build_site():
     with open(csv_path, "r", encoding="utf-8") as f:
         articles = list(csv.DictReader(f))
 
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
     list_items_html = ""
     for row in articles:
+        canonical_url = f"{SITE_URL}/{row['slug']}.html"
         html_out = article_template.format(
             title=row["title"],
             category=row["category"],
@@ -74,7 +116,10 @@ def build_site():
             buyee_url_sub=make_buyee_url(row["jp_keyword_sub"]),
             ad_1_label=row["ad_1_label"], ad_1_url=make_amazon_url(row["ad_1_query"], amazon_tag),
             ad_2_label=row["ad_2_label"], ad_2_url=make_amazon_url(row["ad_2_query"], amazon_tag),
-            ad_3_label=row["ad_3_label"], ad_3_url=make_amazon_url(row["ad_3_query"], amazon_tag)
+            ad_3_label=row["ad_3_label"], ad_3_url=make_amazon_url(row["ad_3_query"], amazon_tag),
+            site_url=SITE_URL,
+            canonical_url=canonical_url,
+            current_date=current_date
         )
         with open(f"{row['slug']}.html", "w", encoding="utf-8") as out_f:
             out_f.write(html_out)
@@ -90,12 +135,20 @@ def build_site():
         """
 
     with open("index.html", "w", encoding="utf-8") as out_idx:
-        out_idx.write(index_template.format(list_items=list_items_html))
+        out_idx.write(index_template.format(
+            list_items=list_items_html,
+            site_url=SITE_URL,
+            current_date=current_date
+        ))
+
+    # sitemap.xml と robots.txt の自動生成
+    generate_sitemap(articles, current_date)
+    generate_robots_txt()
 
 def run_git_commands():
     commands = [
         ["git", "add", "."],
-        ["git", "commit", "-m", "Scale to 100 guides: Add 55 Tier-2 retro titles and implement responsive 24-item pagination"],
+        ["git", "commit", "-m", "Implement technical SEO: dynamic meta tags, canonical URLs, OGP, JSON-LD structured data, sitemap.xml, and robots.txt"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:

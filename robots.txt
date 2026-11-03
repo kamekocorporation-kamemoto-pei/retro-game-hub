@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kamekocorporation-kamemoto-pei.github.io/retro-game-hub/sitemap.xml
