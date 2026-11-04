@@ -127,9 +127,38 @@ def build_site():
 
     current_date = datetime.now().strftime("%Y-%m-%d")
 
+    # 同カテゴリの関連記事を抽出するためのマップ
+    category_map = {}
+    for a in articles:
+        category_map.setdefault(a["category"], []).append(a)
+
     list_items_html = ""
-    for row in articles:
+    for i, row in enumerate(articles):
         canonical_url = f"{SITE_URL}/{row['slug']}.html"
+
+        # 関連記事の選定（偏りが出ないようローテーション）
+        same_cat = [a for a in category_map.get(row["category"], []) if a["slug"] != row["slug"]]
+        num_same = len(same_cat)
+        if num_same <= 4:
+            selected_related = same_cat
+        else:
+            start_idx = i % num_same
+            selected_related = [same_cat[(start_idx + offset) % num_same] for offset in range(4)]
+
+        related_cards = []
+        for rel in selected_related:
+            snippet = rel["why_japan"].strip()
+            if len(snippet) > 105:
+                snippet = snippet[:102].rstrip() + "..."
+            card = f"""                <div class="related-card">
+                    <span class="badge">{rel['category']}</span>
+                    <h3><a href="{rel['slug']}.html">{rel['title']}</a></h3>
+                    <p>{snippet}</p>
+                    <a class="read-more" href="{rel['slug']}.html">Read Guide &rarr;</a>
+                </div>"""
+            related_cards.append(card)
+        related_guides_html = "\n".join(related_cards)
+
         html_out = article_template.format(
             title=row["title"],
             category=row["category"],
@@ -146,7 +175,8 @@ def build_site():
             ad_3_label=row["ad_3_label"], ad_3_url=make_amazon_url(row["ad_3_query"], amazon_tag),
             site_url=SITE_URL,
             canonical_url=canonical_url,
-            current_date=current_date
+            current_date=current_date,
+            related_guides_html=related_guides_html
         )
         with open(f"{row['slug']}.html", "w", encoding="utf-8") as out_f:
             out_f.write(html_out)
@@ -176,7 +206,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "-A"],
-        ["git", "commit", "-m", "Scale database to 150 unique guides and update sitemap"],
+        ["git", "commit", "-m", "Add related guides section, curator message, and compliant disclosures"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:
