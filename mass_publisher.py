@@ -176,7 +176,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "-A"],
-        ["git", "commit", "-m", "Enable Buyee affiliate deep links across all 100 guides"],
+        ["git", "commit", "-m", "Scale database to 150 unique guides and update sitemap"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:
