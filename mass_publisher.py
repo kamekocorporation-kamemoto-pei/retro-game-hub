@@ -9,15 +9,27 @@ BRANCH = "main"
 CONFIG_FILE = "affiliate_config.txt"
 SITE_URL = "https://kamekocorporation-kamemoto-pei.github.io/retro-game-hub"
 
-def get_amazon_tag():
-    """ローカル設定ファイルからストアIDを安全に読み込む"""
+def get_affiliate_config():
+    """ローカル設定ファイルからストアIDとBuyeeアフィリエイトURLを安全に読み込む"""
+    config = {
+        "AMAZON_TAG": "YOUR_STORE_ID_HERE",
+        "BUYEE_BASE_URL": ""
+    }
     if not os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-            f.write("YOUR_STORE_ID_HERE")
-        return "YOUR_STORE_ID_HERE"
+            f.write("AMAZON_TAG=YOUR_STORE_ID_HERE\nBUYEE_BASE_URL=\n")
+        return config
     with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-        tag = f.read().strip()
-        return tag if tag else "YOUR_STORE_ID_HERE"
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                k, v = line.split("=", 1)
+                config[k.strip()] = v.strip()
+            elif config["AMAZON_TAG"] == "YOUR_STORE_ID_HERE":
+                config["AMAZON_TAG"] = line
+    return config
 
 def ensure_gitignore():
     """ストアID設定ファイルがGitHubに公開されないよう保護する"""
@@ -33,8 +45,12 @@ def ensure_gitignore():
         with open(gitignore_path, "w", encoding="utf-8") as f:
             f.write(f"{CONFIG_FILE}\n")
 
-def make_buyee_url(keyword_jp):
-    return f"https://buyee.jp/mercari/search?keyword={urllib.parse.quote(keyword_jp)}"
+def make_buyee_url(keyword_jp, buyee_base_url=""):
+    target_url = f"https://buyee.jp/mercari/search?keyword={urllib.parse.quote(keyword_jp)}&status=on_sale"
+    if buyee_base_url:
+        encoded_target = urllib.parse.quote(target_url, safe="")
+        return f"{buyee_base_url}?url={encoded_target}"
+    return target_url
 
 def make_amazon_url(query_en, amazon_tag):
     base_url = f"https://www.amazon.co.jp/s?k={urllib.parse.quote(query_en)}"
@@ -96,8 +112,11 @@ def build_site():
         print("エラー: data/retro_games.csv が見つかりません。")
         return
 
-    amazon_tag = get_amazon_tag()
+    config = get_affiliate_config()
+    amazon_tag = config.get("AMAZON_TAG", "YOUR_STORE_ID_HERE")
+    buyee_base_url = config.get("BUYEE_BASE_URL", "")
     print(f"適用中のAmazonトラッキングID: {amazon_tag}")
+    print(f"適用中のBuyeeトラッキングベースURL: {'有効 (' + buyee_base_url + ')' if buyee_base_url else '未設定'}")
 
     with open(article_tpl_path, "r", encoding="utf-8") as f:
         article_template = f.read()
@@ -120,8 +139,8 @@ def build_site():
             buyer_tips=row["buyer_tips"],
             jp_keyword_main=row["jp_keyword_main"],
             jp_keyword_sub=row["jp_keyword_sub"],
-            buyee_url_main=make_buyee_url(row["jp_keyword_main"]),
-            buyee_url_sub=make_buyee_url(row["jp_keyword_sub"]),
+            buyee_url_main=make_buyee_url(row["jp_keyword_main"], buyee_base_url),
+            buyee_url_sub=make_buyee_url(row["jp_keyword_sub"], buyee_base_url),
             ad_1_label=row["ad_1_label"], ad_1_url=make_amazon_url(row["ad_1_query"], amazon_tag),
             ad_2_label=row["ad_2_label"], ad_2_url=make_amazon_url(row["ad_2_query"], amazon_tag),
             ad_3_label=row["ad_3_label"], ad_3_url=make_amazon_url(row["ad_3_query"], amazon_tag),
@@ -156,8 +175,8 @@ def build_site():
 
 def run_git_commands():
     commands = [
-        ["git", "add", "."],
-        ["git", "commit", "-m", "Implement technical SEO: dynamic meta tags, canonical URLs, OGP, JSON-LD structured data, sitemap.xml, and robots.txt"],
+        ["git", "add", "-A"],
+        ["git", "commit", "-m", "Enable Buyee affiliate deep links across all 100 guides"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:
