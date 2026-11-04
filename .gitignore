@@ -2,3 +2,11 @@ affiliate_config.txt
 __pycache__/
 *.py[cod]
 
+# Marketing tools & video files (Google Drive synced)
+marketing_tools/
+drive_staging/
+*.mp4
+*.mov
+*.vrew
+*.wav
+*.mp3

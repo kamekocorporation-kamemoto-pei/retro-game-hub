@@ -115,6 +115,16 @@ def build_site():
     config = get_affiliate_config()
     amazon_tag = config.get("AMAZON_TAG", "YOUR_STORE_ID_HERE")
     buyee_base_url = config.get("BUYEE_BASE_URL", "")
+    request_form_url = config.get("REQUEST_FORM_URL", "").strip()
+
+    if request_form_url:
+        request_form_target = 'target="_blank" rel="noopener"'
+        print(f"適用中のGoogleフォームURL: {request_form_url}")
+    else:
+        request_form_url = "#request-guide"
+        request_form_target = 'onclick="alert(\'Form URL not yet configured. Please set REQUEST_FORM_URL in affiliate_config.txt!\'); return false;"'
+        print("適用中のGoogleフォームURL: 未設定（#request-guide にフォールバック）")
+
     print(f"適用中のAmazonトラッキングID: {amazon_tag}")
     print(f"適用中のBuyeeトラッキングベースURL: {'有効 (' + buyee_base_url + ')' if buyee_base_url else '未設定'}")
 
@@ -176,7 +186,9 @@ def build_site():
             site_url=SITE_URL,
             canonical_url=canonical_url,
             current_date=current_date,
-            related_guides_html=related_guides_html
+            related_guides_html=related_guides_html,
+            request_form_url=request_form_url,
+            request_form_target=request_form_target
         )
         with open(f"{row['slug']}.html", "w", encoding="utf-8") as out_f:
             out_f.write(html_out)
@@ -195,7 +207,9 @@ def build_site():
         out_idx.write(index_template.format(
             list_items=list_items_html,
             site_url=SITE_URL,
-            current_date=current_date
+            current_date=current_date,
+            request_form_url=request_form_url,
+            request_form_target=request_form_target
         ))
 
     # sitemap.xml, robots.txt, Google Search Console確認ファイルの自動生成
@@ -206,7 +220,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "-A"],
-        ["git", "commit", "-m", "Add related guides section, curator message, and compliant disclosures"],
+        ["git", "commit", "-m", "Update community request config and gitignore rules for video production"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:

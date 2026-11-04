@@ -88,6 +88,10 @@
         .footer-disclaimer p { margin: 0 0 12px 0; }
         .footer-disclaimer p:last-child { margin-bottom: 0; }
         .copyright { margin: 0; }
+
+        .request-banner { text-align: center; margin: -10px auto 24px auto; }
+        .request-pill { display: inline-flex; align-items: center; gap: 8px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 8px 18px; border-radius: 9999px; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .request-pill:hover { background: #d1fae5; color: #047857; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(16, 185, 129, 0.2); }
     </style>
 </head>
 <body>
@@ -95,6 +99,10 @@
         <h1>🎮 JDM Retro Gaming Import Hub</h1>
         <p class="subtitle">100% Authentic Japanese Consoles, Mods & CIB Games. Every guide includes an Anti-Bootleg Verification Checklist and direct Buyee search filters.</p>
     </header>
+
+    <div class="request-banner">
+        <a class="request-pill" href="#request-guide" onclick="alert('Form URL not yet configured. Please set REQUEST_FORM_URL in affiliate_config.txt!'); return false;">➕ Request a Guide for #151 &amp; Beyond</a>
+    </div>
 
     <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search 150 guides (e.g., Virtual Boy, Duo-R, GBA SP, Emerald, Saturn)..." onkeyup="onSearchInput()">
 
