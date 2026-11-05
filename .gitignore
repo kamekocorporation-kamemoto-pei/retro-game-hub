@@ -10,3 +10,6 @@ drive_staging/
 *.vrew
 *.wav
 *.mp3
+kameko_*.jpg
+*.jpg
+*.png
