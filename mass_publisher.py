@@ -220,7 +220,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "-A"],
-        ["git", "commit", "-m", "Update community request config and gitignore rules for video production"],
+        ["git", "commit", "-m", "Update site with official community request form link"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:
