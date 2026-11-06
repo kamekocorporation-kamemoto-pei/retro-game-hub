@@ -104,11 +104,19 @@ def generate_sitemap(articles, current_date):
 
 GSC_VERIFICATION_FILE = "googlef37282339517c341.html"
 GSC_VERIFICATION_CONTENT = "google-site-verification: googlef37282339517c341.html"
+GSC_META_TAG = '<meta name="google-site-verification" content="OMWM3rRBhDwVELwVX8JjeAHf3pCAWcCKjEzAu4Ese8w" />'
 
 def ensure_gsc_verification():
-    """Google Search Consoleの所有権確認用HTMLファイルを自動維持・出力"""
+    """Google Search Consoleの所有権確認用HTMLファイルおよびindex.html内のmetaタグを自動維持・出力"""
     with open(GSC_VERIFICATION_FILE, "w", encoding="utf-8") as f:
         f.write(GSC_VERIFICATION_CONTENT)
+    if os.path.exists("index.html"):
+        with open("index.html", "r", encoding="utf-8") as f:
+            idx_html = f.read()
+        if 'content="OMWM3rRBhDwVELwVX8JjeAHf3pCAWcCKjEzAu4Ese8w"' not in idx_html:
+            idx_html = idx_html.replace("<head>", f"<head>\n    {GSC_META_TAG}", 1)
+            with open("index.html", "w", encoding="utf-8") as f:
+                f.write(idx_html)
 
 def generate_robots_txt():
     """検索エンジンクローラー向けの robots.txt を生成"""
