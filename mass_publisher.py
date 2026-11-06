@@ -45,12 +45,30 @@ def ensure_gitignore():
         with open(gitignore_path, "w", encoding="utf-8") as f:
             f.write(f"{CONFIG_FILE}\n")
 
-def make_buyee_url(keyword_jp, buyee_base_url=""):
-    target_url = f"https://buyee.jp/mercari/search?keyword={urllib.parse.quote(keyword_jp)}&status=on_sale"
+def make_buyee_deep_link(target_url, buyee_base_url=""):
+    """IndoleadsアフィリエイトベースURLの ?url= に目的URLをエンコードして結合"""
     if buyee_base_url:
         encoded_target = urllib.parse.quote(target_url, safe="")
         return f"{buyee_base_url}?url={encoded_target}"
     return target_url
+
+def make_surugaya_url(keyword_jp, buyee_base_url=""):
+    """① 駿河屋（Buyee公式統合ショップ・アフィリエイトディープリンク）"""
+    target_url = f"https://buyee.jp/surugaya/search?search_word={urllib.parse.quote(keyword_jp)}"
+    return make_buyee_deep_link(target_url, buyee_base_url)
+
+def make_mercari_url(keyword_jp, buyee_base_url=""):
+    """② メルカリJP（Buyee公式連携・アフィリエイトディープリンク）"""
+    target_url = f"https://buyee.jp/mercari/search?keyword={urllib.parse.quote(keyword_jp)}&status=on_sale"
+    return make_buyee_deep_link(target_url, buyee_base_url)
+
+def make_hardoff_url(keyword_jp):
+    """③ ハードオフ（オフモール直接検索URL）"""
+    return f"https://netmall.hardoff.co.jp/search/?q={urllib.parse.quote(keyword_jp)}"
+
+def make_buyee_url(keyword_jp, buyee_base_url=""):
+    """後方互換用エイリアス"""
+    return make_mercari_url(keyword_jp, buyee_base_url)
 
 def make_amazon_url(query_en, amazon_tag):
     base_url = f"https://www.amazon.co.jp/s?k={urllib.parse.quote(query_en)}"
@@ -178,8 +196,12 @@ def build_site():
             buyer_tips=row["buyer_tips"],
             jp_keyword_main=row["jp_keyword_main"],
             jp_keyword_sub=row["jp_keyword_sub"],
-            buyee_url_main=make_buyee_url(row["jp_keyword_main"], buyee_base_url),
-            buyee_url_sub=make_buyee_url(row["jp_keyword_sub"], buyee_base_url),
+            buyee_surugaya_url_main=make_surugaya_url(row["jp_keyword_main"], buyee_base_url),
+            buyee_mercari_url_main=make_mercari_url(row["jp_keyword_main"], buyee_base_url),
+            buyee_mercari_url_sub=make_mercari_url(row["jp_keyword_sub"], buyee_base_url),
+            hardoff_url_main=make_hardoff_url(row["jp_keyword_main"]),
+            buyee_url_main=make_mercari_url(row["jp_keyword_main"], buyee_base_url),
+            buyee_url_sub=make_mercari_url(row["jp_keyword_sub"], buyee_base_url),
             ad_1_label=row["ad_1_label"], ad_1_url=make_amazon_url(row["ad_1_query"], amazon_tag),
             ad_2_label=row["ad_2_label"], ad_2_url=make_amazon_url(row["ad_2_query"], amazon_tag),
             ad_3_label=row["ad_3_label"], ad_3_url=make_amazon_url(row["ad_3_query"], amazon_tag),
@@ -220,7 +242,7 @@ def build_site():
 def run_git_commands():
     commands = [
         ["git", "add", "-A"],
-        ["git", "commit", "-m", "Update site with official community request form link"],
+        ["git", "commit", "-m", "Reorder and color-code shop buttons (Surugaya -> Mercari -> Hard Off) with clean accordion guide"],
         ["git", "push", "origin", BRANCH]
     ]
     for cmd in commands:

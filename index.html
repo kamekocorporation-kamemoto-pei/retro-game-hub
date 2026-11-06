@@ -92,6 +92,26 @@
         .request-banner { text-align: center; margin: -10px auto 24px auto; }
         .request-pill { display: inline-flex; align-items: center; gap: 8px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 8px 18px; border-radius: 9999px; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
         .request-pill:hover { background: #d1fae5; color: #047857; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(16, 185, 129, 0.2); }
+
+        /* 3-Column How to Buy Safely Guide */
+        .guide-intro-section { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 26px 28px; margin: 0 auto 28px auto; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .guide-intro-header { text-align: center; margin-bottom: 20px; }
+        .guide-intro-header h2 { font-size: 1.38rem; color: #0f172a; margin: 0 0 6px 0; }
+        .guide-intro-header p { font-size: 0.94rem; color: #64748b; margin: 0; }
+        .guide-intro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+        .intro-card { background: #f8fafc; border-radius: 12px; padding: 20px 22px; border: 2px solid transparent; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+        .intro-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+        .card-surugaya { border-color: #a7f3d0; background: #f0fdf4; }
+        .card-mercari { border-color: #fecdd3; background: #fff1f2; }
+        .card-hardoff { border-color: #fde68a; background: #fffbeb; }
+        .intro-badge { display: inline-block; align-self: flex-start; font-size: 0.74rem; font-weight: 800; padding: 3px 9px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+        .card-surugaya .intro-badge { background: #059669; color: #ffffff; }
+        .card-mercari .intro-badge { background: #e11d48; color: #ffffff; }
+        .card-hardoff .intro-badge { background: #d97706; color: #ffffff; }
+        .intro-card h3 { margin: 0 0 4px 0; font-size: 1.15rem; color: #0f172a; }
+        .intro-subtitle { font-size: 0.82rem; font-weight: 600; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.03em; }
+        .intro-card p { font-size: 0.88rem; line-height: 1.6; color: #334155; margin: 0 0 14px 0; flex-grow: 1; }
+        .intro-meta { font-size: 0.82rem; color: #475569; border-top: 1px solid rgba(0,0,0,0.07); padding-top: 10px; }
     </style>
 </head>
 <body>
@@ -102,6 +122,37 @@
 
     <div class="request-banner">
         <a class="request-pill" href="https://docs.google.com/forms/d/e/1FAIpQLSe0Z9GYnr6V1OugnOdpjrbK5WUm4WgoXcj3ytpVfKzpPDqnWA/viewform" target="_blank" rel="noopener">➕ Request a Guide for #151 &amp; Beyond</a>
+    </div>
+
+    <!-- 3-Column How to Buy Safely Route Guide -->
+    <div class="guide-intro-section">
+        <div class="guide-intro-header">
+            <h2>🇯🇵 3 Proven Routes to Buy Authentic Retro Games from Japan</h2>
+            <p>Every guide on this site links directly to these 3 verified shopping channels. Here is how they compare:</p>
+        </div>
+        <div class="guide-intro-grid">
+            <div class="intro-card card-surugaya">
+                <div class="intro-badge">🥇 Store Inspected</div>
+                <h3>1. Suruga-ya (駿河屋)</h3>
+                <div class="intro-subtitle">Japan's Premier Specialty Shop</div>
+                <p>Inspected, tested, and graded in-person by veteran Japanese store clerks. Near zero counterfeit risk—ideal for mint CIB boxed games and high-value consoles.</p>
+                <div class="intro-meta"><strong>Safety:</strong> ⭐⭐⭐⭐⭐ (Highest Reliability)</div>
+            </div>
+            <div class="intro-card card-mercari">
+                <div class="intro-badge">💎 Best Bargains (C2C)</div>
+                <h3>2. Mercari JP + Our Checklist</h3>
+                <div class="intro-subtitle">Japan's #1 Flea Market App</div>
+                <p>Buy directly from Japanese gamers at local yard-sale prices (40-70% below eBay). Always cross-reference listing photos with our <em>Anti-Bootleg Checklists</em> to spot reshells!</p>
+                <div class="intro-meta"><strong>Safety:</strong> ⭐⭐⭐⭐ (Safe with our Checklist)</div>
+            </div>
+            <div class="intro-card card-hardoff">
+                <div class="intro-badge">🏪 Physical Store Chain</div>
+                <h3>3. Hard Off Off-Mall</h3>
+                <div class="intro-subtitle">Nationwide Thrift Network</div>
+                <p>Browse live inventory from hundreds of brick-and-mortar Hard Off stores across Japan. Genuine OEM controllers, cables, and graded hardware ready for Buyee proxy ordering.</p>
+                <div class="intro-meta"><strong>Safety:</strong> ⭐⭐⭐⭐⭐ (Shop Staff Graded)</div>
+            </div>
+        </div>
     </div>
 
     <input type="text" id="searchBox" class="search-input" placeholder="🔍 Search 150 guides (e.g., Virtual Boy, Duo-R, GBA SP, Emerald, Saturn)..." onkeyup="onSearchInput()">
