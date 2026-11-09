@@ -129,6 +129,119 @@ Sitemap: {SITE_URL}/sitemap.xml
         f.write(robots_content)
     print("robots.txt を生成しました")
 
+CATEGORY_DECODER_ROWS = {
+    "Handhelds": [
+        ("Safe", "🟢 Safe", "画面ヤケ / 黄ばみ", "Screen Yellowing", "Mild age-related color shift on DS/GBA screens. 100% playable and authentic."),
+        ("Modder", "🟡 Modder Only", "外装傷み / 塗装ハゲ", "Shell Wear / Paint Peeling", "Great budget donor for IPS screen or reshell modding (authentic OEM motherboard inside)."),
+        ("Trap", "🔴 Fatal Trap", "ビネガーシンドローム", "Vinegar Syndrome", "Degraded polarizer film causing dark blotches and sour odor. Requires screen replacement."),
+        ("Trap", "🔴 Fatal Trap", "ヒンジ割れ / 充電ランプ一瞬点灯", "Cracked Hinge / Flash Charge Light", "Broken shell hinge or blown motherboard fuse (F1/F2)."),
+        ("Trap", "🔴 Fatal Trap", "液漏れ / 水没反応", "Battery Corrosion / Water Damage", "Alkaline battery acid or liquid has corroded the PCB traces. Avoid."),
+    ],
+    "Consoles": [
+        ("Safe", "🟢 Safe", "本体ヤケ / 変色", "ABS Plastic Yellowing", "Cosmetic yellowing common on white/grey Japanese consoles. Does not affect internal hardware reliability."),
+        ("Modder", "🟡 Modder Only", "時計電池切れ", "Dead Clock Battery", "Requires a simple CR2032 coin battery swap (e.g., Sega Saturn back slot)."),
+        ("Trap", "🔴 Fatal Trap", "通電のみ確認", "Power Light Only", "<strong>FATAL RED FLAG.</strong> The power LED turns on, but there is NO video/audio output (dead capacitors or GPU/PPU failure)."),
+        ("Trap", "🔴 Fatal Trap", "ディスク読み込まず / 音楽CD画面", "Disc Read Error", "Failing optical laser pickup on CD/GD-ROM consoles."),
+        ("Trap", "🔴 Fatal Trap", "ターミネータパック欠品", "Missing Jumper Pak", "For N64, the console will not output video without the front memory pak installed."),
+    ],
+    "Collector Games": [
+        ("Safe", "🟢 Safe", "帯なし / ハガキなし", "Missing Obi Spine Card", "For CD games (Saturn/PS1/DC), missing the paper spine strip. 100% authentic disc at a lower price."),
+        ("Modder", "🟡 Modder Only", "バックアップ電池切れ", "Dry Save/Clock Battery", "Common on GBA Pokemon or SFC RPGs. Confirms an authentic board; easily fixed by soldering a tabbed coin battery."),
+        ("Trap", "🔴 Fatal Trap", "海外製 / 並行輸入品", "Overseas / Parallel Import", "<strong>100% COUNTERFEIT EUPHEMISM.</strong> When Japanese Mercari sellers list GBA/SFC cartridges (like Mother 3 or Pokemon) as &quot;Overseas version&quot;, it is guaranteed to be a cheap bootleg repro."),
+        ("Trap", "🔴 Fatal Trap", "リング割れ / 深いキズ", "Center Ring Crack / Deep Scratches", "Structural crack in the disc hub or data-layer damage."),
+    ],
+    "Controllers & Gear": [
+        ("Safe", "🟢 Safe", "軽度のスレ / ヤケ", "Minor Scuffs / Yellowing", "Normal cosmetic wear on authentic OEM plastic."),
+        ("Trap", "🔴 Fatal Trap", "ドリフト / 入力暴走", "Stick Drift / Phantom Inputs", "Worn analog stick potentiometer requiring part replacement."),
+        ("Trap", "🔴 Fatal Trap", "本体のみ・スタートアップディスク欠品", "Unit Only / Missing Startup Disc", "For Game Boy Player, the bottom attachment cannot boot on unmodded consoles without the Startup Disc."),
+        ("Trap", "🔴 Fatal Trap", "社外品 / 互換品", "Third-Party / Generic Clone", "Unlicensed aftermarket replica lacking official Nintendo/Sega/Sony logos."),
+    ],
+}
+
+UNIVERSAL_DECODER_ROWS = [
+    ("Safe", "🟢 Safe", "動作確認済", "Tested & Working", "Safe to buy. Seller confirmed normal boot and operation."),
+    ("Safe", "🟢 Safe", "箱説なし", "Loose / No Box or Manual", "Working authentic item missing collector packaging. Best value for players."),
+    ("Trap", "🔴 Fatal Trap", "動作未確認", "Untested", "<strong>TRAP ON FLEA MARKETS.</strong> On Mercari JP, private sellers often use &quot;Untested&quot; to hide known dead units while avoiding returns."),
+    ("Trap", "🔴 Fatal Trap", "現状品 / 部品取り", "As-Is / For Parts", "Confirmed broken unit sold strictly for spare parts."),
+]
+
+def _render_decoder_rows(rows):
+    out = []
+    for level, badge_text, jp_term, en_term, desc in rows:
+        if level == "Safe":
+            pill_cls = "risk-safe"
+        elif level == "Modder":
+            pill_cls = "risk-mod"
+        else:
+            pill_cls = "risk-trap"
+        out.append(
+            f"""                <tr>
+                    <td style="width: 130px;"><span class="risk-pill {pill_cls}">{badge_text}</span></td>
+                    <td style="width: 220px;"><span class="jp-term">{jp_term}</span><span class="en-term">{en_term}</span></td>
+                    <td>{desc}</td>
+                </tr>"""
+        )
+    return "\n".join(out)
+
+def build_junk_decoder_html(category):
+    """カテゴリ別のJDM Condition & 'JUNK' Decoder HTMLセクションを動的生成"""
+    universal_rows_html = _render_decoder_rows(UNIVERSAL_DECODER_ROWS)
+    cat_rows = CATEGORY_DECODER_ROWS.get(category, CATEGORY_DECODER_ROWS["Consoles"])
+    cat_rows_html = _render_decoder_rows(cat_rows)
+
+    return f"""        <div class="decoder-section">
+            <h2>2. JDM Condition &amp; &quot;JUNK&quot; Decoder ({category} Edition)</h2>
+            <div class="safety-rule-box">
+                <strong>⚠️ Curator Safety Rule:</strong> On Japanese flea markets (Mercari JP / Yahoo Auctions), proxy services NEVER refund items labeled as <strong>ジャンク (Junk)</strong> or <strong>動作未確認 (Untested)</strong>. Unless you are an experienced modder, always filter for <strong>動作確認済 (Tested &amp; Working)</strong> or buy from staff-inspected stores like Suruga-ya.
+            </div>
+
+            <h3 class="decoder-subhead">📋 Part A: Universal JDM Condition Terms (All Categories)</h3>
+            <table>
+                <tr>
+                    <th>Risk Level</th>
+                    <th>Japanese Term (Kanji)</th>
+                    <th>Real-World Meaning for Overseas Buyers</th>
+                </tr>
+{universal_rows_html}
+            </table>
+
+            <h3 class="decoder-subhead">🔍 Part B: Specialized Decoder for {category}</h3>
+            <table>
+                <tr>
+                    <th>Risk Level</th>
+                    <th>{category} Listing Term</th>
+                    <th>Hardware Reality &amp; Buyer Verdict</th>
+                </tr>
+{cat_rows_html}
+            </table>
+        </div>"""
+
+def build_smart_proxy_routing_html():
+    """購入リンク直前に配置する Smart Proxy Routing & True Cost Guide HTMLを生成"""
+    return """        <div class="proxy-routing-box">
+            <div class="proxy-routing-header">
+                <h2>✈️ Smart Proxy Routing &amp; True Cost Guide</h2>
+                <p>How to avoid hidden shipping bloat and foreign exchange fees when importing from Japan:</p>
+            </div>
+            <div class="proxy-grid">
+                <div class="proxy-tip-card">
+                    <span class="proxy-tip-badge badge-single">🥇 Single Item &amp; High-Value</span>
+                    <h4>1. Single Item &amp; High-Value Games &rarr; Suruga-ya (Staff-Inspected)</h4>
+                    <p><strong>Why:</strong> Every item is tested and authenticated by store staff before shipping. Look for frequent &quot;Free Shipping / 0 Yen Commission&quot; campaigns on Buyee.</p>
+                </div>
+                <div class="proxy-tip-card">
+                    <span class="proxy-tip-badge badge-consolidation">📦 Multi-Item Hauls</span>
+                    <h4>2. Multi-Item Consolidation (Avoiding the &quot;Volumetric Air&quot; Shipping Trap)</h4>
+                    <p><strong>Why:</strong> When combining multiple consoles or boxed games via proxy, standard consolidation often leaves inner seller boxes intact, causing DHL/FedEx <strong>volumetric weight (容積重量)</strong> to explode to $60–$100+. Always request downsizing or consider proxies known for compact repacking when building large hauls.</p>
+                </div>
+                <div class="proxy-tip-card">
+                    <span class="proxy-tip-badge badge-fx">💴 Currency &amp; FX Tip</span>
+                    <h4>3. Currency &amp; Fee Tip (Avoiding Hidden FX Markups)</h4>
+                    <p><strong>Why:</strong> Proxy platforms often embed a 3%–6% exchange rate markup when charging in USD/EUR. Whenever possible, set your payment method (PayPal or zero-FX credit card) to bill directly in <strong>Japanese Yen (JPY)</strong> to save on every order.</p>
+                </div>
+            </div>
+        </div>"""
+
 def build_site():
     csv_path = os.path.join("data", "retro_games.csv")
     article_tpl_path = os.path.join("templates", "article_template.html")
@@ -195,6 +308,9 @@ def build_site():
             related_cards.append(card)
         related_guides_html = "\n".join(related_cards)
 
+        junk_decoder_html = build_junk_decoder_html(row["category"])
+        smart_proxy_routing_html = build_smart_proxy_routing_html()
+
         html_out = article_template.format(
             title=row["title"],
             category=row["category"],
@@ -218,7 +334,9 @@ def build_site():
             current_date=current_date,
             related_guides_html=related_guides_html,
             request_form_url=request_form_url,
-            request_form_target=request_form_target
+            request_form_target=request_form_target,
+            junk_decoder_html=junk_decoder_html,
+            smart_proxy_routing_html=smart_proxy_routing_html
         )
         with open(f"{row['slug']}.html", "w", encoding="utf-8") as out_f:
             out_f.write(html_out)
@@ -242,16 +360,21 @@ def build_site():
             request_form_target=request_form_target
         ))
 
+    print(f"全 {len(articles)} 記事ページ + index.html を再生成しました")
+
     # sitemap.xml, robots.txt, Google Search Console確認ファイルの自動生成
     generate_sitemap(articles, current_date)
     generate_robots_txt()
     ensure_gsc_verification()
 
 def run_git_commands():
+    git_exe = r"C:\Users\inomo\AppData\Local\Programs\MinGit\cmd\git.exe"
+    if not os.path.exists(git_exe):
+        git_exe = "git"
     commands = [
-        ["git", "add", "-A"],
-        ["git", "commit", "-m", "Reorder and color-code shop buttons (Surugaya -> Mercari -> Hard Off) with clean accordion guide"],
-        ["git", "push", "origin", BRANCH]
+        [git_exe, "add", "."],
+        [git_exe, "commit", "-m", "Add category-specific JDM Junk Decoder and Smart Proxy Routing guide"],
+        [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:
         subprocess.run(cmd, check=False)
