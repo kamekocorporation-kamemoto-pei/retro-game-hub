@@ -13,3 +13,8 @@ drive_staging/
 kameko_*.jpg
 *.jpg
 *.png
+!images/
+!images/**
+!images/products/
+!images/products/*.jpg
+!images/products/*.png

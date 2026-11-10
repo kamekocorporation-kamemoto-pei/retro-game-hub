@@ -1,13 +1,188 @@
 import os
+import io
+import re
 import csv
+import json
+import shutil
 import subprocess
 import urllib.parse
+import urllib.request
+from pathlib import Path
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 REPO_URL = "https://github.com/kamekocorporation-kamemoto-pei/retro-game-hub.git"
 BRANCH = "main"
 CONFIG_FILE = "affiliate_config.txt"
 SITE_URL = "https://kamekocorporation-kamemoto-pei.github.io/retro-game-hub"
+
+CACHE_PRODUCT_IMAGES_DIR = Path("marketing_tools") / "product_images"
+WEB_PRODUCT_IMAGES_DIR = Path("images") / "products"
+
+HTTP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9,ja;q=0.8",
+}
+
+CURATED_IMAGE_QUERIES = {
+    "gba-sp-buying-guide": ("Game Boy Advance SP", "ゲームボーイアドバンスSP 本体 箱 純正"),
+    "nintendo-ds-lite-guide": ("Nintendo DS Lite", "ニンテンドーDS Lite 本体 箱 美品"),
+    "gamecube-controller-white-guide": ("Nintendo GameCube controller", "ゲームキューブ コントローラー ホワイト 純正"),
+    "pokemon-gba-cib-guide": ("Pokémon Emerald", "ポケットモンスター エメラルド 箱 カセット"),
+    "game-boy-player-startup-disc-guide": ("Game Boy Player", "ゲームボーイプレーヤー スタートアップディスク"),
+    "ps-vita-2000-japan-colors": ("PlayStation Vita", "PS Vita PCH-2000 ネオンオレンジ 本体"),
+    "game-boy-micro-jdm-guide": ("Game Boy Micro", "ゲームボーイミクロ ファミコンバージョン 本体"),
+    "sega-saturn-white-import-guide": ("Sega Saturn", "セガサターン シロ HST-3220 本体 箱"),
+    "nintendo-64-clear-colors-guide": ("Nintendo 64", "NINTENDO64 クリアブルー 本体"),
+    "ascii-keyboard-controller-gc": ("Nintendo GameCube accessories", "ゲームキューブ キーボードコントローラー 箱 本体"),
+    "mother-3-gba-authentic-guide": ("Mother 3", "MOTHER3 ゲームボーイアドバンス 箱説 完品"),
+    "ikaruga-dreamcast-gamecube-guide": ("Ikaruga", "斑鳩 ドリームキャスト ソフト 帯"),
+    "castlevania-symphony-of-the-night-jp": ("Castlevania: Symphony of the Night", "悪魔城ドラキュラX 月下の夜想曲 PS1 帯"),
+    "neo-geo-pocket-color-slim-guide": ("Neo Geo Pocket Color", "ネオジオポケットカラー New 本体 箱"),
+    "chrono-trigger-sfc-cib-guide": ("Chrono Trigger", "クロノトリガー スーパーファミコン 箱 カセット"),
+}
+
+def _search_yahoo_jp_images(query: str) -> list:
+    urls = []
+    try:
+        url = "https://search.yahoo.co.jp/image/search?p=" + urllib.parse.quote(query)
+        req = urllib.request.Request(url, headers=HTTP_HEADERS)
+        raw_html = urllib.request.urlopen(req, timeout=10).read().decode("utf-8", errors="ignore")
+        orig_urls = re.findall(r'"original"\s*:\s*\{"url"\s*:\s*"(https?://[^"]+)"', raw_html)
+        thumb_urls = re.findall(r'"thumbnail"\s*:\s*\{"url"\s*:\s*"(https?://[^"]+)"', raw_html)
+        for u in orig_urls + thumb_urls:
+            u_clean = u.replace("\\/", "/")
+            if u_clean not in urls:
+                urls.append(u_clean)
+    except Exception:
+        pass
+    return urls
+
+def _search_wikipedia_image(wiki_title: str) -> list:
+    urls = []
+    if not wiki_title:
+        return urls
+    try:
+        api = (
+            "https://en.wikipedia.org/w/api.php?action=query"
+            f"&titles={urllib.parse.quote(wiki_title)}"
+            "&prop=pageimages&piprop=original|thumbnail&pithumbsize=1000&format=json&redirects=1"
+        )
+        req = urllib.request.Request(
+            api,
+            headers={"User-Agent": "JDMRetroHubCurator/1.0 (https://github.com/kamekocorporation-kamemoto-pei)"}
+        )
+        data = json.loads(urllib.request.urlopen(req, timeout=8).read().decode("utf-8", errors="ignore"))
+        pages = data.get("query", {}).get("pages", {})
+        for p in pages.values():
+            orig = p.get("original", {}).get("source")
+            thumb = p.get("thumbnail", {}).get("source")
+            if orig and not orig.lower().endswith(".svg"):
+                urls.append(orig)
+            if thumb:
+                urls.append(thumb)
+    except Exception:
+        pass
+    return urls
+
+def _save_web_optimized(im: Image.Image, dest_path: Path):
+    web_im = ImageOps.contain(im.convert("RGB"), (840, 840), Image.Resampling.LANCZOS)
+    web_im.save(dest_path, "JPEG", quality=88, optimize=True)
+
+def _sync_single_product_image(row: dict) -> tuple:
+    slug = row["slug"].strip()
+    cached_jpg = CACHE_PRODUCT_IMAGES_DIR / f"{slug}.jpg"
+    web_jpg = WEB_PRODUCT_IMAGES_DIR / f"{slug}.jpg"
+
+    # 1. If web image already exists and cached image exists, nothing to do
+    if web_jpg.exists() and web_jpg.stat().st_size > 3500:
+        if not cached_jpg.exists():
+            shutil.copy2(web_jpg, cached_jpg)
+        return (slug, "existing")
+
+    # 2. If cached image exists in marketing_tools/product_images/, copy/optimize to images/products/
+    if cached_jpg.exists() and cached_jpg.stat().st_size > 3500:
+        try:
+            im = Image.open(cached_jpg).convert("RGB")
+            _save_web_optimized(im, web_jpg)
+            return (slug, "copied_from_cache")
+        except Exception:
+            pass
+
+    # 3. Fetch automatically using jp_keyword_main + Wikipedia fallback
+    title_clean = re.sub(r"\s*\([^)]*\)", "", row.get("title", slug)).strip()
+    jp_kw = row.get("jp_keyword_main", "").strip()
+    jp_sub = row.get("jp_keyword_sub", "").strip()
+    if slug in CURATED_IMAGE_QUERIES:
+        wiki_title, search_q = CURATED_IMAGE_QUERIES[slug]
+    else:
+        wiki_title = title_clean
+        search_q = f"{jp_kw} 本体 箱" if jp_kw else f"{title_clean} Japanese retro game"
+
+    cand_urls = _search_yahoo_jp_images(search_q)
+    if jp_kw and jp_kw != search_q:
+        cand_urls += _search_yahoo_jp_images(jp_kw)
+    if jp_sub:
+        cand_urls += _search_yahoo_jp_images(jp_sub)
+    cand_urls += _search_wikipedia_image(wiki_title)
+
+    for min_w, min_h in [(480, 360), (240, 200)]:
+        for u in cand_urls[:16]:
+            try:
+                req = urllib.request.Request(u, headers=HTTP_HEADERS)
+                raw_bytes = urllib.request.urlopen(req, timeout=8).read()
+                im = Image.open(io.BytesIO(raw_bytes))
+                if im.width < min_w or im.height < min_h:
+                    continue
+                if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
+                    rgba = im.convert("RGBA")
+                    bg = Image.new("RGB", rgba.size, (255, 255, 255))
+                    bg.paste(rgba, mask=rgba.split()[3])
+                    im = bg
+                else:
+                    im = im.convert("RGB")
+                im.save(cached_jpg, "JPEG", quality=92)
+                _save_web_optimized(im, web_jpg)
+                return (slug, "fetched")
+            except Exception:
+                continue
+
+    # 4. Clean stylized OEM reference card fallback if network image unavailable
+    fallback = Image.new("RGB", (720, 540), (15, 23, 42))
+    draw = ImageDraw.Draw(fallback)
+    draw.rounded_rectangle([24, 24, 696, 516], radius=20, outline=(56, 189, 248), width=4)
+    try:
+        font_lg = ImageFont.truetype(r"C:\Windows\Fonts\arialbd.ttf", 30)
+        font_sm = ImageFont.truetype(r"C:\Windows\Fonts\arial.ttf", 20)
+    except Exception:
+        font_lg = ImageFont.load_default()
+        font_sm = font_lg
+    draw.text((360, 235), title_clean[:38], font=font_lg, fill=(248, 250, 252), anchor="mm")
+    draw.text((360, 295), "JDM Authentic Hardware / CIB Reference", font=font_sm, fill=(148, 163, 184), anchor="mm")
+    fallback.save(cached_jpg, "JPEG", quality=90)
+    _save_web_optimized(fallback, web_jpg)
+    return (slug, "fallback")
+
+def sync_and_fetch_product_images(articles: list):
+    """全150品目の商品画像を marketing_tools/product_images/ と images/products/ に同期・自動補完"""
+    CACHE_PRODUCT_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+    WEB_PRODUCT_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+
+    stats = {"existing": 0, "copied_from_cache": 0, "fetched": 0, "fallback": 0}
+    print(f"商品画像の同期・補完を開始します（全 {len(articles)} 品目）...")
+    with ThreadPoolExecutor(max_workers=12) as executor:
+        futures = {executor.submit(_sync_single_product_image, row): row["slug"] for row in articles}
+        for idx, fut in enumerate(as_completed(futures), 1):
+            slug, status = fut.result()
+            stats[status] = stats.get(status, 0) + 1
+            if idx % 25 == 0 or idx == len(articles):
+                print(f"  進捗: {idx}/{len(articles)} 完了 (キャッシュ複製:{stats['copied_from_cache']}, 新規取得:{stats['fetched']}, 既存:{stats['existing']})")
+    print(f"商品画像の準備完了: {stats}")
 
 def get_affiliate_config():
     """ローカル設定ファイルからストアIDとBuyeeアフィリエイトURLを安全に読み込む"""
@@ -32,18 +207,26 @@ def get_affiliate_config():
     return config
 
 def ensure_gitignore():
-    """ストアID設定ファイルがGitHubに公開されないよう保護する"""
+    """ストアID設定ファイルがGitHubに公開されないよう保護しつつ、公開用のimages/products/は追跡許可する"""
     gitignore_path = ".gitignore"
-    ignore_entry = f"\n{CONFIG_FILE}\n"
+    required_entries = [
+        CONFIG_FILE,
+        "!images/",
+        "!images/**",
+        "!images/products/",
+        "!images/products/*.jpg",
+        "!images/products/*.png",
+    ]
     if os.path.exists(gitignore_path):
         with open(gitignore_path, "r", encoding="utf-8") as f:
             content = f.read()
-        if CONFIG_FILE not in content:
+        to_append = [e for e in required_entries if e not in content]
+        if to_append:
             with open(gitignore_path, "a", encoding="utf-8") as f:
-                f.write(ignore_entry)
+                f.write("\n" + "\n".join(to_append) + "\n")
     else:
         with open(gitignore_path, "w", encoding="utf-8") as f:
-            f.write(f"{CONFIG_FILE}\n")
+            f.write("\n".join(required_entries) + "\n")
 
 def make_buyee_deep_link(target_url, buyee_base_url=""):
     """IndoleadsアフィリエイトベースURLの ?url= に目的URLをエンコードして結合"""
@@ -280,6 +463,9 @@ def build_site():
     with open(csv_path, "r", encoding="utf-8") as f:
         articles = list(csv.DictReader(f))
 
+    # 全150品目の商品画像を同期・自動取得して images/products/{slug}.jpg に配置
+    sync_and_fetch_product_images(articles)
+
     current_date = datetime.now().strftime("%Y-%m-%d")
 
     # 同カテゴリの関連記事を抽出するためのマップ
@@ -318,6 +504,7 @@ def build_site():
         smart_proxy_routing_html = build_smart_proxy_routing_html()
 
         html_out = article_template.format(
+            slug=row["slug"],
             title=row["title"],
             category=row["category"],
             region_info=row["region_info"],
@@ -349,6 +536,9 @@ def build_site():
 
         list_items_html += f"""
         <div class="article-card" data-category="{row['category']}">
+            <a class="card-thumb-wrap" href="{row['slug']}.html">
+                <img class="card-thumb-img" src="images/products/{row['slug']}.jpg" alt="Authentic Japanese {row['title']} CIB / Console" loading="lazy" onerror="this.parentElement.style.display='none';">
+            </a>
             <span class="badge">{row['category']}</span>
             <span class="auth-tag">🛡️ Anti-Bootleg Verified</span>
             <h2><a href="{row['slug']}.html">{row['title']}</a></h2>
@@ -378,8 +568,9 @@ def run_git_commands():
     if not os.path.exists(git_exe):
         git_exe = "git"
     commands = [
+        [git_exe, "add", "images/"],
         [git_exe, "add", "."],
-        [git_exe, "commit", "-m", "Add Google Search Console verification meta tag and persist in mass_publisher"],
+        [git_exe, "commit", "-m", "Add authentic product reference images to all 150 guides and homepage"],
         [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:
