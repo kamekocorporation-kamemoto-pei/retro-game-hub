@@ -476,7 +476,7 @@ def build_junk_decoder_html(category):
 def build_smart_proxy_routing_html(keyword_jp=""):
     """購入リンク直前に配置する Smart Proxy Routing & True Cost Guide HTMLを生成"""
     fj_url = make_fromjapan_url(keyword_jp)
-    zm_url = make_zenmarket_url(keyword_jp) if keyword_jp else "https://zenmarket.jp/en/"
+    zm_url = "https://zenmarket.jp/en/" if not ZENMARKET_AFF_CODE else make_zenmarket_url(keyword_jp)
     return f"""        <div class="proxy-routing-box">
             <div class="proxy-routing-header">
                 <h2>✈️ Smart Proxy Routing &amp; True Cost Guide</h2>
@@ -491,7 +491,8 @@ def build_smart_proxy_routing_html(keyword_jp=""):
                 <div class="proxy-tip-card">
                     <span class="proxy-tip-badge badge-consolidation">📦 Multi-Item Hauls</span>
                     <h4>2. Multi-Item Consolidation (Avoiding the &quot;Volumetric Air&quot; Shipping Trap)</h4>
-                    <p><strong>Why:</strong> When combining multiple consoles or boxed games, standard consolidation often leaves inner seller boxes intact, causing DHL/FedEx <strong>volumetric weight (容積重量)</strong> to explode to $60–$100+. For multi-item hauls, use <a href="{fj_url}" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:700;">One Map by FROM JAPAN</a> or <a href="{zm_url}" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:700;">ZenMarket</a> for compact repacking across multiple shops.</p>
+                    <p><strong>Why:</strong> When combining multiple consoles or boxed games via proxy, standard consolidation often leaves inner seller boxes intact, causing DHL/FedEx <strong>volumetric weight (容積重量)</strong> to explode to $60–$100+. Always request downsizing or consider proxies known for compact repacking when building large hauls.</p>
+                    <p style="margin-top:8px;"><a href="{fj_url}" target="_blank" rel="noopener sponsored" style="color:#60a5fa;font-weight:bold;">👉 Compare Multi-Store Hauls &amp; Compact Consolidation via FROM JAPAN (Official Partner) &rarr;</a> | <a href="{zm_url}" target="_blank" rel="noopener" style="color:#94a3b8;">ZenMarket</a></p>
                 </div>
                 <div class="proxy-tip-card">
                     <span class="proxy-tip-badge badge-fx">💴 Currency &amp; FX Tip</span>
@@ -647,8 +648,8 @@ def run_git_commands():
     if not os.path.exists(git_exe):
         git_exe = "git"
     commands = [
-        [git_exe, "add", "."],
-        [git_exe, "commit", "-m", "Add FromJapan, Amazon US (kameko0613-20), and ZenMarket-ready affiliate links across all 150 guides"],
+        [git_exe, "add", "-A"],
+        [git_exe, "commit", "-m", "Deploy FromJapan (A26382) and US Amazon (kameko0613-20) affiliate links across all guides"],
         [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:
