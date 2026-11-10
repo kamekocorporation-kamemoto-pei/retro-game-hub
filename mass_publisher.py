@@ -86,9 +86,12 @@ def _is_fallback_card(img_path: Path) -> bool:
         return True
     try:
         with Image.open(img_path) as im:
-            if im.size == (720, 540):
-                px = im.convert("RGB").getpixel((5, 5))
-                if abs(px[0] - 15) <= 6 and abs(px[1] - 23) <= 6 and abs(px[2] - 42) <= 6:
+            if im.size in ((720, 540), (840, 630)):
+                rgb = im.convert("RGB")
+                px1 = rgb.getpixel((5, 5))
+                px2 = rgb.getpixel((100, 100))
+                if (abs(px1[0] - 15) <= 6 and abs(px1[1] - 23) <= 6 and abs(px1[2] - 42) <= 6 and
+                    abs(px2[0] - 15) <= 6 and abs(px2[1] - 23) <= 6 and abs(px2[2] - 42) <= 6):
                     return True
     except Exception:
         return True
