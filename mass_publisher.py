@@ -107,16 +107,22 @@ GSC_VERIFICATION_CONTENT = "google-site-verification: googlef37282339517c341.htm
 GSC_META_TAG = '<meta name="google-site-verification" content="OMWM3rRBhDwVELwVX8JjeAHf3pCAWcCKjEzAu4Ese8w" />'
 
 def ensure_gsc_verification():
-    """Google Search Consoleの所有権確認用HTMLファイルおよびindex.html内のmetaタグを自動維持・出力"""
+    """Google Search Consoleの所有権確認用HTMLファイルおよびテンプレート/index.html内のmetaタグを自動維持・出力"""
     with open(GSC_VERIFICATION_FILE, "w", encoding="utf-8") as f:
         f.write(GSC_VERIFICATION_CONTENT)
-    if os.path.exists("index.html"):
-        with open("index.html", "r", encoding="utf-8") as f:
-            idx_html = f.read()
-        if 'content="OMWM3rRBhDwVELwVX8JjeAHf3pCAWcCKjEzAu4Ese8w"' not in idx_html:
-            idx_html = idx_html.replace("<head>", f"<head>\n    {GSC_META_TAG}", 1)
-            with open("index.html", "w", encoding="utf-8") as f:
-                f.write(idx_html)
+    target_files = [
+        "index.html",
+        os.path.join("templates", "index_template.html"),
+        os.path.join("templates", "article_template.html"),
+    ]
+    for path in target_files:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                html_text = f.read()
+            if 'content="OMWM3rRBhDwVELwVX8JjeAHf3pCAWcCKjEzAu4Ese8w"' not in html_text:
+                html_text = html_text.replace("<head>", f"<head>\n    {GSC_META_TAG}", 1)
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(html_text)
 
 def generate_robots_txt():
     """検索エンジンクローラー向けの robots.txt を生成"""
@@ -373,7 +379,7 @@ def run_git_commands():
         git_exe = "git"
     commands = [
         [git_exe, "add", "."],
-        [git_exe, "commit", "-m", "Add category-specific JDM Junk Decoder and Smart Proxy Routing guide"],
+        [git_exe, "commit", "-m", "Add Google Search Console verification meta tag and persist in mass_publisher"],
         [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:
@@ -381,6 +387,7 @@ def run_git_commands():
 
 if __name__ == "__main__":
     ensure_gitignore()
+    ensure_gsc_verification()
     build_site()
     run_git_commands()
     print("サイト再生成およびGitHubへの反映が完了しました！")
