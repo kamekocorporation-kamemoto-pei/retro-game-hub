@@ -17,6 +17,13 @@ BRANCH = "main"
 CONFIG_FILE = "affiliate_config.txt"
 SITE_URL = "https://kamekocorporation-kamemoto-pei.github.io/retro-game-hub"
 
+# アフィリエイト定数設定
+BUYEE_PREFIX = "https://io20.info/6aea82bc10193?url="
+FROMJAPAN_AFF_URL = "https://affili.fromjapan.co.jp/gateway/A26382"
+AMAZON_US_TAG = "kameko0613-20"
+AMAZON_JP_TAG = "kameko084-22"
+ZENMARKET_AFF_CODE = ""  # 審査通過後に "?aff=XXXX" 等を設定すれば全ページ自動反映
+
 CACHE_PRODUCT_IMAGES_DIR = Path("marketing_tools") / "product_images"
 WEB_PRODUCT_IMAGES_DIR = Path("images") / "products"
 
@@ -265,9 +272,12 @@ def ensure_gitignore():
 
 def make_buyee_deep_link(target_url, buyee_base_url=""):
     """IndoleadsアフィリエイトベースURLの ?url= に目的URLをエンコードして結合"""
+    encoded_target = urllib.parse.quote(target_url, safe="")
+    prefix = BUYEE_PREFIX
     if buyee_base_url:
-        encoded_target = urllib.parse.quote(target_url, safe="")
-        return f"{buyee_base_url}?url={encoded_target}"
+        prefix = buyee_base_url if buyee_base_url.endswith("?url=") else f"{buyee_base_url}?url="
+    if prefix:
+        return f"{prefix}{encoded_target}"
     return target_url
 
 def make_surugaya_url(keyword_jp, buyee_base_url=""):
@@ -284,15 +294,38 @@ def make_hardoff_url(keyword_jp):
     """③ ハードオフ（オフモール直接検索URL）"""
     return f"https://netmall.hardoff.co.jp/search/?q={urllib.parse.quote(keyword_jp)}"
 
+def make_fromjapan_url(keyword_jp=""):
+    """④ FromJapan / One Map（複数まとめ買い・横断検索用アフィリエイトリンク）"""
+    return FROMJAPAN_AFF_URL
+
+def make_zenmarket_url(keyword_jp):
+    """⑤ ZenMarket（ZENMARKET_AFF_CODE設定時に全ページへアフィリエイトコードを自動付与）"""
+    base = f"https://zenmarket.jp/en/mercari.aspx?q={urllib.parse.quote(keyword_jp)}"
+    if ZENMARKET_AFF_CODE:
+        code = ZENMARKET_AFF_CODE.strip()
+        if code.startswith("?"):
+            return f"{base}&{code[1:]}"
+        elif code.startswith("&"):
+            return f"{base}{code}"
+        else:
+            return f"{base}&aff={urllib.parse.quote(code)}"
+    return base
+
 def make_buyee_url(keyword_jp, buyee_base_url=""):
     """後方互換用エイリアス"""
     return make_mercari_url(keyword_jp, buyee_base_url)
 
-def make_amazon_url(query_en, amazon_tag):
+def make_amazon_url(query_en, amazon_tag=AMAZON_US_TAG):
+    """米国Amazon（Amazon.com）検索アフィリエイトリンク（メイン）"""
+    base_url = f"https://www.amazon.com/s?k={urllib.parse.quote(query_en)}"
+    tag = AMAZON_US_TAG if not amazon_tag or amazon_tag == "YOUR_STORE_ID_HERE" else amazon_tag
+    return f"{base_url}&tag={urllib.parse.quote(tag)}"
+
+def make_amazon_jp_url(query_en, amazon_jp_tag=AMAZON_JP_TAG):
+    """日本Amazon（Amazon.co.jp）検索アフィリエイトリンク（サブ）"""
     base_url = f"https://www.amazon.co.jp/s?k={urllib.parse.quote(query_en)}"
-    if amazon_tag and amazon_tag != "YOUR_STORE_ID_HERE":
-        return f"{base_url}&tag={urllib.parse.quote(amazon_tag)}"
-    return base_url
+    tag = amazon_jp_tag or AMAZON_JP_TAG
+    return f"{base_url}&tag={urllib.parse.quote(tag)}"
 
 def generate_sitemap(articles, current_date):
     """Google検索インデックス用の sitemap.xml を標準規格で生成"""
@@ -440,9 +473,11 @@ def build_junk_decoder_html(category):
             </table>
         </div>"""
 
-def build_smart_proxy_routing_html():
+def build_smart_proxy_routing_html(keyword_jp=""):
     """購入リンク直前に配置する Smart Proxy Routing & True Cost Guide HTMLを生成"""
-    return """        <div class="proxy-routing-box">
+    fj_url = make_fromjapan_url(keyword_jp)
+    zm_url = make_zenmarket_url(keyword_jp) if keyword_jp else "https://zenmarket.jp/en/"
+    return f"""        <div class="proxy-routing-box">
             <div class="proxy-routing-header">
                 <h2>✈️ Smart Proxy Routing &amp; True Cost Guide</h2>
                 <p>How to avoid hidden shipping bloat and foreign exchange fees when importing from Japan:</p>
@@ -456,7 +491,7 @@ def build_smart_proxy_routing_html():
                 <div class="proxy-tip-card">
                     <span class="proxy-tip-badge badge-consolidation">📦 Multi-Item Hauls</span>
                     <h4>2. Multi-Item Consolidation (Avoiding the &quot;Volumetric Air&quot; Shipping Trap)</h4>
-                    <p><strong>Why:</strong> When combining multiple consoles or boxed games via proxy, standard consolidation often leaves inner seller boxes intact, causing DHL/FedEx <strong>volumetric weight (容積重量)</strong> to explode to $60–$100+. Always request downsizing or consider proxies known for compact repacking when building large hauls.</p>
+                    <p><strong>Why:</strong> When combining multiple consoles or boxed games, standard consolidation often leaves inner seller boxes intact, causing DHL/FedEx <strong>volumetric weight (容積重量)</strong> to explode to $60–$100+. For multi-item hauls, use <a href="{fj_url}" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:700;">One Map by FROM JAPAN</a> or <a href="{zm_url}" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:700;">ZenMarket</a> for compact repacking across multiple shops.</p>
                 </div>
                 <div class="proxy-tip-card">
                     <span class="proxy-tip-badge badge-fx">💴 Currency &amp; FX Tip</span>
@@ -536,7 +571,7 @@ def build_site():
         related_guides_html = "\n".join(related_cards)
 
         junk_decoder_html = build_junk_decoder_html(row["category"])
-        smart_proxy_routing_html = build_smart_proxy_routing_html()
+        smart_proxy_routing_html = build_smart_proxy_routing_html(row["jp_keyword_main"])
 
         html_out = article_template.format(
             slug=row["slug"],
@@ -552,11 +587,19 @@ def build_site():
             buyee_mercari_url_main=make_mercari_url(row["jp_keyword_main"], buyee_base_url),
             buyee_mercari_url_sub=make_mercari_url(row["jp_keyword_sub"], buyee_base_url),
             hardoff_url_main=make_hardoff_url(row["jp_keyword_main"]),
+            fromjapan_url_main=make_fromjapan_url(row["jp_keyword_main"]),
+            zenmarket_url_main=make_zenmarket_url(row["jp_keyword_main"]),
             buyee_url_main=make_mercari_url(row["jp_keyword_main"], buyee_base_url),
             buyee_url_sub=make_mercari_url(row["jp_keyword_sub"], buyee_base_url),
-            ad_1_label=row["ad_1_label"], ad_1_url=make_amazon_url(row["ad_1_query"], amazon_tag),
-            ad_2_label=row["ad_2_label"], ad_2_url=make_amazon_url(row["ad_2_query"], amazon_tag),
-            ad_3_label=row["ad_3_label"], ad_3_url=make_amazon_url(row["ad_3_query"], amazon_tag),
+            ad_1_label=row["ad_1_label"],
+            ad_1_url=make_amazon_url(row["ad_1_query"], AMAZON_US_TAG),
+            ad_1_jp_url=make_amazon_jp_url(row["ad_1_query"], AMAZON_JP_TAG),
+            ad_2_label=row["ad_2_label"],
+            ad_2_url=make_amazon_url(row["ad_2_query"], AMAZON_US_TAG),
+            ad_2_jp_url=make_amazon_jp_url(row["ad_2_query"], AMAZON_JP_TAG),
+            ad_3_label=row["ad_3_label"],
+            ad_3_url=make_amazon_url(row["ad_3_query"], AMAZON_US_TAG),
+            ad_3_jp_url=make_amazon_jp_url(row["ad_3_query"], AMAZON_JP_TAG),
             site_url=SITE_URL,
             canonical_url=canonical_url,
             current_date=current_date,
@@ -588,7 +631,8 @@ def build_site():
             site_url=SITE_URL,
             current_date=current_date,
             request_form_url=request_form_url,
-            request_form_target=request_form_target
+            request_form_target=request_form_target,
+            fromjapan_aff_url=FROMJAPAN_AFF_URL
         ))
 
     print(f"全 {len(articles)} 記事ページ + index.html を再生成しました")
@@ -603,9 +647,8 @@ def run_git_commands():
     if not os.path.exists(git_exe):
         git_exe = "git"
     commands = [
-        [git_exe, "add", "images/"],
         [git_exe, "add", "."],
-        [git_exe, "commit", "-m", "Add authentic product reference images to all 150 guides and homepage"],
+        [git_exe, "commit", "-m", "Add FromJapan, Amazon US (kameko0613-20), and ZenMarket-ready affiliate links across all 150 guides"],
         [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:
