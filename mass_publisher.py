@@ -63,6 +63,37 @@ def _search_yahoo_jp_images(query: str) -> list:
         pass
     return urls
 
+def _search_bing_images(query: str) -> list:
+    urls = []
+    try:
+        url = "https://www.bing.com/images/search?q=" + urllib.parse.quote(query) + "&FORM=HDRSC2"
+        req = urllib.request.Request(url, headers=HTTP_HEADERS)
+        raw_html = urllib.request.urlopen(req, timeout=10).read().decode("utf-8", errors="ignore")
+        murls = re.findall(r'murl&quot;:&quot;(https?://[^&]+?)&quot;', raw_html)
+        for u in murls:
+            if any(bad in u.lower() for bad in ("free-aigames", "monjeux", "poki.com", "crazygames")):
+                continue
+            if u not in urls:
+                urls.append(u)
+    except Exception:
+        pass
+    return urls
+
+def _is_fallback_card(img_path: Path) -> bool:
+    if not img_path.exists():
+        return True
+    if img_path.stat().st_size < 3500:
+        return True
+    try:
+        with Image.open(img_path) as im:
+            if im.size == (720, 540):
+                px = im.convert("RGB").getpixel((5, 5))
+                if abs(px[0] - 15) <= 6 and abs(px[1] - 23) <= 6 and abs(px[2] - 42) <= 6:
+                    return True
+    except Exception:
+        return True
+    return False
+
 def _search_wikipedia_image(wiki_title: str) -> list:
     urls = []
     if not wiki_title:
@@ -99,14 +130,14 @@ def _sync_single_product_image(row: dict) -> tuple:
     cached_jpg = CACHE_PRODUCT_IMAGES_DIR / f"{slug}.jpg"
     web_jpg = WEB_PRODUCT_IMAGES_DIR / f"{slug}.jpg"
 
-    # 1. If web image already exists and cached image exists, nothing to do
-    if web_jpg.exists() and web_jpg.stat().st_size > 3500:
-        if not cached_jpg.exists():
+    # 1. If web image already exists and is a real photo (not fallback), keep it
+    if not _is_fallback_card(web_jpg):
+        if _is_fallback_card(cached_jpg):
             shutil.copy2(web_jpg, cached_jpg)
         return (slug, "existing")
 
-    # 2. If cached image exists in marketing_tools/product_images/, copy/optimize to images/products/
-    if cached_jpg.exists() and cached_jpg.stat().st_size > 3500:
+    # 2. If cached image exists and is a real photo, copy/optimize to images/products/
+    if not _is_fallback_card(cached_jpg):
         try:
             im = Image.open(cached_jpg).convert("RGB")
             _save_web_optimized(im, web_jpg)
@@ -114,7 +145,7 @@ def _sync_single_product_image(row: dict) -> tuple:
         except Exception:
             pass
 
-    # 3. Fetch automatically using jp_keyword_main + Wikipedia fallback
+    # 3. Fetch automatically using Yahoo JP + Bing + Wikipedia
     title_clean = re.sub(r"\s*\([^)]*\)", "", row.get("title", slug)).strip()
     jp_kw = row.get("jp_keyword_main", "").strip()
     jp_sub = row.get("jp_keyword_sub", "").strip()
@@ -125,14 +156,15 @@ def _sync_single_product_image(row: dict) -> tuple:
         search_q = f"{jp_kw} 本体 箱" if jp_kw else f"{title_clean} Japanese retro game"
 
     cand_urls = _search_yahoo_jp_images(search_q)
+    if not cand_urls and jp_kw:
+        cand_urls += _search_bing_images(jp_kw)
     if jp_kw and jp_kw != search_q:
         cand_urls += _search_yahoo_jp_images(jp_kw)
-    if jp_sub:
-        cand_urls += _search_yahoo_jp_images(jp_sub)
+    cand_urls += _search_bing_images(f"{jp_kw} レトロゲーム" if jp_kw else f"{title_clean} Japan")
     cand_urls += _search_wikipedia_image(wiki_title)
 
-    for min_w, min_h in [(480, 360), (240, 200)]:
-        for u in cand_urls[:16]:
+    for min_w, min_h in [(420, 320), (220, 180)]:
+        for u in cand_urls[:18]:
             try:
                 req = urllib.request.Request(u, headers=HTTP_HEADERS)
                 raw_bytes = urllib.request.urlopen(req, timeout=8).read()
@@ -175,7 +207,7 @@ def sync_and_fetch_product_images(articles: list):
 
     stats = {"existing": 0, "copied_from_cache": 0, "fetched": 0, "fallback": 0}
     print(f"商品画像の同期・補完を開始します（全 {len(articles)} 品目）...")
-    with ThreadPoolExecutor(max_workers=12) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {executor.submit(_sync_single_product_image, row): row["slug"] for row in articles}
         for idx, fut in enumerate(as_completed(futures), 1):
             slug, status = fut.result()
