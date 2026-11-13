@@ -328,7 +328,7 @@ def make_amazon_jp_url(query_en, amazon_jp_tag=AMAZON_JP_TAG):
     return f"{base_url}&tag={urllib.parse.quote(tag)}"
 
 def generate_sitemap(articles, current_date):
-    """Google検索インデックス用の sitemap.xml を標準規格で生成"""
+    """Google検索インデックス用の sitemap.xml および sitemap-main.xml を標準規格で生成（BOMなしUTF-8・クリーン出力）"""
     urls_xml = f"""  <url>
     <loc>{SITE_URL}/</loc>
     <lastmod>{current_date}</lastmod>
@@ -347,11 +347,12 @@ def generate_sitemap(articles, current_date):
     sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {urls_xml.rstrip()}
-</urlset>
-"""
-    with open("sitemap.xml", "w", encoding="utf-8") as f:
-        f.write(sitemap_content)
-    print(f"sitemap.xml を生成しました（合計 {len(articles) + 1} URL）")
+</urlset>"""
+    clean_sitemap = sitemap_content.strip() + "\n"
+    for filename in ("sitemap.xml", "sitemap-main.xml"):
+        with open(filename, "w", encoding="utf-8", newline="\n") as f:
+            f.write(clean_sitemap)
+    print(f"sitemap.xml および sitemap-main.xml を生成しました（合計 {len(articles) + 1} URL）")
 
 GSC_VERIFICATION_FILE = "googlef37282339517c341.html"
 GSC_VERIFICATION_CONTENT = "google-site-verification: googlef37282339517c341.html"
@@ -381,9 +382,10 @@ def generate_robots_txt():
 Allow: /
 
 Sitemap: {SITE_URL}/sitemap.xml
+Sitemap: {SITE_URL}/sitemap-main.xml
 """
-    with open("robots.txt", "w", encoding="utf-8") as f:
-        f.write(robots_content)
+    with open("robots.txt", "w", encoding="utf-8", newline="\n") as f:
+        f.write(robots_content.strip() + "\n")
     print("robots.txt を生成しました")
 
 CATEGORY_DECODER_ROWS = {
@@ -649,7 +651,7 @@ def run_git_commands():
         git_exe = "git"
     commands = [
         [git_exe, "add", "-A"],
-        [git_exe, "commit", "-m", "Deploy FromJapan (A26382) and US Amazon (kameko0613-20) affiliate links across all guides"],
+        [git_exe, "commit", "-m", "Deploy GA4 (G-L84SX664FD), TikTok SEO JSON-LD sameAs, and clean dual sitemaps"],
         [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:
