@@ -1,0 +1,84 @@
+{
+  "project_name": "JDM Retro Gaming Hub",
+  "public_url": "https://kamekocorporation-kamemoto-pei.github.io/retro-game-hub/",
+  "tiktok_handle": "@jdm_retro_gaming_hub",
+  "tiktok_url": "https://www.tiktok.com/@jdm_retro_gaming_hub",
+  "version": "2.0.0",
+  "architecture": "Gemini Notebook x 8 Specialist Skills x Google Antigravity Factory",
+  "protected_constants": {
+    "ga4_measurement_id": "G-L84SX664FD",
+    "fromjapan_affiliate_id": "A26382",
+    "amazon_us_store_id": "kameko0613-20",
+    "amazon_jp_store_id": "kameko084-22",
+    "zenmarket_placeholder": "ZENMARKET_AFF_CODE",
+    "gsc_verification_code": "OMWM3rRBhDwVELwVX8JjeAHf3pCAWcCKjEzAu4Ese8w"
+  },
+  "departments": {
+    "01_secretary": {
+      "skill_name": "jdm-hub-secretary",
+      "role": "HQ PMO & Master Ledger",
+      "managed_files": [
+        "organization_manifest.json",
+        "README.md"
+      ]
+    },
+    "02_authenticity_lab": {
+      "skill_name": "jdm-hub-authenticity-lab",
+      "role": "OEM Codes & JUNK Decoder Data",
+      "managed_files": [
+        "data/products.csv",
+        "images/products/"
+      ]
+    },
+    "03_monetize_logistics": {
+      "skill_name": "jdm-hub-monetize-logistics",
+      "role": "Proxy Routing & Affiliate Constants",
+      "managed_files": [
+        "templates/article_template.html",
+        "templates/index_template.html"
+      ]
+    },
+    "04_web_publishing": {
+      "skill_name": "jdm-hub-web-publishing",
+      "role": "mass_publisher.py & GitHub Pages Deploy",
+      "managed_files": [
+        "mass_publisher.py",
+        "*.html"
+      ]
+    },
+    "05_video_creative": {
+      "skill_name": "jdm-hub-video-creative",
+      "role": "tiktok_scripts_150.json & 6-Slide MP4 Generator",
+      "managed_files": [
+        "marketing_tools/tiktok_scripts_150.json",
+        "marketing_tools/asset_builder.py",
+        "marketing_tools/video_generator.py"
+      ]
+    },
+    "06_quality_check": {
+      "skill_name": "jdm-hub-quality-check",
+      "role": "5-Criteria Video & Image QC",
+      "managed_files": [
+        "verify_hub_integrity.py",
+        "marketing_tools/visual_assets/"
+      ]
+    },
+    "07_sns_automation": {
+      "skill_name": "jdm-hub-sns-automation",
+      "role": "tiktok_auto_poster.py & Pinned Comments",
+      "managed_files": [
+        "marketing_tools/tiktok_auto_poster.py",
+        "marketing_tools/run_tiktok_poster.bat"
+      ]
+    },
+    "08_seo_analytics": {
+      "skill_name": "jdm-hub-seo-analytics",
+      "role": "sitemap.xml, sitemap-main.xml, robots.txt & GA4",
+      "managed_files": [
+        "sitemap.xml",
+        "sitemap-main.xml",
+        "robots.txt"
+      ]
+    }
+  }
+}
