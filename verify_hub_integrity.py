@@ -7,6 +7,7 @@ Video Rendering Queues, and SNS Automation.
 
 import os
 import sys
+import re
 import json
 from pathlib import Path
 
@@ -167,29 +168,48 @@ class HubIntegrityAuditor:
 
         self.log(cat, "Master scripts count (全150品目)", len(scripts) == 150, f"Total items: {len(scripts)}")
 
-        seo_target_items = [s for s in scripts if s.get("id", 0) >= 16]
+        seo_target_items = [s for s in scripts if s.get("id", 0) >= 12]
         seo_passed = []
         seo_failed = []
+
+        forbidden_words = [
+            "check link in bio", "links in our bio", "direct", "inventory",
+            "fake", "buy", "trap", "scam", "proxy"
+        ]
+
+        valid_pattern_prefixes = (
+            "Authentic Japanese ",
+            "How to Identify an Authentic ",
+            "Complete JDM Collector's Guide: ",
+        )
 
         for item in seo_target_items:
             iid = item.get("id")
             caption = item.get("caption", "")
-            slides = item.get("slides", [])
-            s1_tts = slides[0].get("tts_text", "") if slides else ""
+            first_line = caption.split("\n")[0] if caption else ""
 
-            # Check 1: Caption starts with "How to Spot a Fake"
-            has_seo_title = caption.startswith("How to Spot a Fake ")
-            # Check 2: Audio hook in Slide 1
-            has_asr_hook = "spot a fake" in s1_tts.lower()
+            # Check 1: Caption matches one of 4 valid safe collector patterns
+            has_valid_header = (
+                first_line.startswith(valid_pattern_prefixes) or
+                ("Japanese Import & OEM Authenticity Guide" in first_line)
+            )
 
-            if has_seo_title and has_asr_hook:
+            # Check 2: Zero forbidden moderation trigger words
+            has_forbidden = False
+            for fw in forbidden_words:
+                pat = r"\b" + re.escape(fw) + r"\b" if " " not in fw else re.escape(fw)
+                if re.search(pat, caption, re.IGNORECASE):
+                    has_forbidden = True
+                    break
+
+            if has_valid_header and not has_forbidden:
                 seo_passed.append(iid)
             else:
                 seo_failed.append(iid)
 
         all_seo_valid = len(seo_failed) == 0
-        detail_msg = f"{len(seo_passed)}/135 items fully compliant" if all_seo_valid else f"Failed items: {seo_failed[:5]}..."
-        self.log(cat, "TikTok SEO 4 Signals (#016-#150)", all_seo_valid, detail_msg)
+        detail_msg = f"{len(seo_passed)}/139 items fully safe & compliant" if all_seo_valid else f"Failed items: {seo_failed[:5]}..."
+        self.log(cat, "TikTok Safe Collector Captions (#012-#150)", all_seo_valid, detail_msg)
 
     def audit_sns_automation(self):
         cat = "06. SNS Automation Script"
