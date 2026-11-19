@@ -663,3 +663,10 @@ if __name__ == "__main__":
     build_site()
     run_git_commands()
     print("サイト再生成およびGitHubへの反映が完了しました！")
+    try:
+        import sys
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "marketing_tools"))
+        from gcp_cost_tracker import GCPCostTracker
+        GCPCostTracker().print_free_tier_report()
+    except Exception as e:
+        print(f"[!] Cost report notice: {e}")

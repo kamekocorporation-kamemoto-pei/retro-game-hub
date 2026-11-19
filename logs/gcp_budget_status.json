@@ -9,7 +9,7 @@
   "total_remaining_jpy": 15244.0304,
   "total_remaining_usd": 101.626869,
   "total_usage_percent": 4.72,
-  "last_updated": "2026-11-20 00:37:11",
+  "last_updated": "2026-11-20 01:15:56",
   "services": {
     "Vertex_Imagen_3": {
       "budget_jpy": 6500.0,
@@ -19,7 +19,12 @@
       "remaining_jpy": 6458.0,
       "remaining_usd": 43.053333,
       "usage_percent": 0.65,
-      "call_count": 7
+      "call_count": 7,
+      "effective_spent_jpy": 0.0,
+      "effective_spent_usd": 0.0,
+      "effective_remaining_jpy": 6500.0,
+      "effective_remaining_usd": 43.333333,
+      "effective_usage_percent": 0.0
     },
     "Cloud_TTS": {
       "budget_jpy": 5500.0,
@@ -29,7 +34,12 @@
       "remaining_jpy": 4909.9675,
       "remaining_usd": 32.733117,
       "usage_percent": 10.73,
-      "call_count": 140
+      "call_count": 140,
+      "effective_spent_jpy": 0.0,
+      "effective_spent_usd": 0.0,
+      "effective_remaining_jpy": 5500.0,
+      "effective_remaining_usd": 36.666667,
+      "effective_usage_percent": 0.0
     },
     "Gemini_Pro": {
       "budget_jpy": 4000.0,
@@ -39,7 +49,56 @@
       "remaining_jpy": 3876.0629,
       "remaining_usd": 25.840419,
       "usage_percent": 3.1,
-      "call_count": 128
+      "call_count": 128,
+      "effective_spent_jpy": 0.0,
+      "effective_spent_usd": 0.0,
+      "effective_remaining_jpy": 4000.0,
+      "effective_remaining_usd": 26.666667,
+      "effective_usage_percent": 0.0
+    }
+  },
+  "allow_over_free_tier": true,
+  "total_effective_spent_jpy": 0.0,
+  "total_effective_spent_usd": 0.0,
+  "total_effective_remaining_jpy": 16000.0,
+  "total_effective_remaining_usd": 106.666667,
+  "total_effective_usage_percent": 0.0,
+  "free_tier_tracking": {
+    "Cloud_TTS_Studio": {
+      "unit": "chars",
+      "monthly_free_limit": 100000,
+      "cumulative_used": 23506,
+      "free_tier_usage_percent": 23.51,
+      "over_free_tier_units": 0,
+      "theoretical_spent_jpy": 564.14,
+      "effective_spent_jpy": 0.0
+    },
+    "Cloud_TTS_Journey": {
+      "unit": "chars",
+      "monthly_free_limit": 1000000,
+      "cumulative_used": 5753,
+      "free_tier_usage_percent": 0.58,
+      "over_free_tier_units": 0,
+      "theoretical_spent_jpy": 25.89,
+      "effective_spent_jpy": 0.0
+    },
+    "Vertex_Imagen_3": {
+      "unit": "images",
+      "monthly_free_limit": 150,
+      "cumulative_used": 7,
+      "free_tier_usage_percent": 4.67,
+      "over_free_tier_units": 0,
+      "theoretical_spent_jpy": 42.0,
+      "effective_spent_jpy": 0.0
+    },
+    "Gemini_Pro": {
+      "unit": "tokens",
+      "monthly_free_limit": 1500000,
+      "cumulative_used": 208418,
+      "free_tier_usage_percent": 13.89,
+      "over_free_tier_units": 0,
+      "theoretical_spent_jpy": 123.94,
+      "effective_spent_jpy": 0.0
     }
   }
 }

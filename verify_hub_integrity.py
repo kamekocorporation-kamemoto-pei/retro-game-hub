@@ -259,7 +259,10 @@ class HubIntegrityAuditor:
         if has_budget:
             try:
                 st = json.loads(status_path.read_text(encoding="utf-8"))
-                detail = f"Spent: {st.get('total_spent_jpy', 0):.2f} JPY / Remaining: {st.get('total_remaining_jpy', 0):,.2f} JPY"
+                eff_spent = st.get("total_effective_spent_jpy", 0.0)
+                theo_spent = st.get("total_spent_jpy", 0.0)
+                eff_rem = st.get("total_effective_remaining_jpy", 16000.0)
+                detail = f"Actual(Free-Adj): {eff_spent:.2f} JPY (Theo: {theo_spent:.2f} JPY) / Rem: {eff_rem:,.2f} JPY"
             except Exception:
                 pass
         self.log(cat, "GCP Cost Tracker (16,000 JPY Cap)", has_budget, detail)
@@ -273,6 +276,12 @@ class HubIntegrityAuditor:
         self.audit_sns_automation()
         self.audit_gcp_and_studio_4k()
         self.print_report()
+        try:
+            sys.path.insert(0, str(BASE_DIR / "marketing_tools"))
+            from gcp_cost_tracker import GCPCostTracker
+            GCPCostTracker().print_free_tier_report()
+        except Exception as e:
+            print(f"[!] Warning invoking GCPCostTracker.print_free_tier_report(): {e}")
 
     def print_report(self):
         total = len(self.results)
