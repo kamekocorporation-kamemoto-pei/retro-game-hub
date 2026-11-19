@@ -1,0 +1,45 @@
+{
+  "project_name": "JDM Retro Gaming Hub",
+  "budget_expiry": "2027-01-27",
+  "exchange_rate_usd_jpy": 150.0,
+  "total_budget_jpy": 16000.0,
+  "total_budget_usd": 106.6667,
+  "total_spent_jpy": 755.9696,
+  "total_spent_usd": 5.039796,
+  "total_remaining_jpy": 15244.0304,
+  "total_remaining_usd": 101.626869,
+  "total_usage_percent": 4.72,
+  "last_updated": "2026-11-20 00:37:11",
+  "services": {
+    "Vertex_Imagen_3": {
+      "budget_jpy": 6500.0,
+      "budget_usd": 43.3333,
+      "spent_jpy": 42.0,
+      "spent_usd": 0.28,
+      "remaining_jpy": 6458.0,
+      "remaining_usd": 43.053333,
+      "usage_percent": 0.65,
+      "call_count": 7
+    },
+    "Cloud_TTS": {
+      "budget_jpy": 5500.0,
+      "budget_usd": 36.6667,
+      "spent_jpy": 590.0325,
+      "spent_usd": 3.93355,
+      "remaining_jpy": 4909.9675,
+      "remaining_usd": 32.733117,
+      "usage_percent": 10.73,
+      "call_count": 140
+    },
+    "Gemini_Pro": {
+      "budget_jpy": 4000.0,
+      "budget_usd": 26.6667,
+      "spent_jpy": 123.9371,
+      "spent_usd": 0.826246,
+      "remaining_jpy": 3876.0629,
+      "remaining_usd": 25.840419,
+      "usage_percent": 3.1,
+      "call_count": 128
+    }
+  }
+}

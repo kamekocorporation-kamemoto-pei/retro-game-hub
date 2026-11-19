@@ -651,7 +651,7 @@ def run_git_commands():
         git_exe = "git"
     commands = [
         [git_exe, "add", "-A"],
-        [git_exe, "commit", "-m", "Deploy TikTok crosslink banner, profile links, and TikTok SEO enhancements"],
+        [git_exe, "commit", "-m", "Deploy 4K Museum Dark Studio images (#023-#029), GCP cost ledger, and multilingual hub audit"],
         [git_exe, "push", "origin", BRANCH]
     ]
     for cmd in commands:

@@ -156,6 +156,26 @@ class HubIntegrityAuditor:
         detail_msg = f"{len(found_videos)}/14 videos verified (>500KB)" if all_present else f"Missing: {', '.join(missing_videos)}"
         self.log(cat, "Posting Queue #009-#022 (11/14-11/27) completeness", all_present, detail_msg)
 
+        # Also verify #023-#029 English + Multilingual (ES, FR, DE) MP4s
+        drive_root = target_dir.parent
+        missing_23_29 = []
+        for i in range(23, 30):
+            prefix = f"{i:03d}_"
+            en_matches = list(drive_root.glob(f"{prefix}*.mp4")) or list(target_dir.glob(f"{prefix}*.mp4"))
+            if not en_matches:
+                missing_23_29.append(f"EN#{i:03d}")
+            for lang in ["es", "fr", "de"]:
+                m_matches = list((drive_root / "multilingual" / lang).glob(f"{prefix}*.mp4"))
+                if not m_matches:
+                    missing_23_29.append(f"{lang.upper()}#{i:03d}")
+        all_23_29 = len(missing_23_29) == 0
+        self.log(
+            cat,
+            "Batch #023-#029 4-Language MP4s (EN/ES/FR/DE)",
+            all_23_29,
+            "28/28 multilingual MP4s verified" if all_23_29 else f"Missing: {', '.join(missing_23_29[:6])}",
+        )
+
     def audit_tiktok_seo_scripts(self):
         cat = "05. TikTok Scripts SEO Golden Template"
         scripts_path = BASE_DIR / "marketing_tools" / "tiktok_scripts_150.json"
@@ -226,6 +246,24 @@ class HubIntegrityAuditor:
         self.log(cat, "Custom Pinned Comments (#016-#022)", has_custom_comments or has_slug_mapping, "Individual pinning logic present")
         self.log(cat, "Dynamic Pinned Comment Engine (#023+)", has_dynamic_template, "Generalized template generator active")
 
+    def audit_gcp_and_studio_4k(self):
+        cat = "07. GCP Budget Tracker & 4K Studio Assets"
+        studio_dir = BASE_DIR / "images" / "products_studio_4k"
+        studio_files = list(studio_dir.glob("*.jpg")) if studio_dir.exists() else []
+        self.log(cat, "Imagen 3 4K Studio Images (#023-#029)", len(studio_files) >= 7, f"{len(studio_files)}/7 4K studio masters verified")
+
+        status_path = BASE_DIR / "logs" / "gcp_budget_status.json"
+        ledger_path = BASE_DIR / "logs" / "gcp_cost_ledger.csv"
+        has_budget = status_path.exists() and ledger_path.exists()
+        detail = "16,000 JPY budget ledger active"
+        if has_budget:
+            try:
+                st = json.loads(status_path.read_text(encoding="utf-8"))
+                detail = f"Spent: {st.get('total_spent_jpy', 0):.2f} JPY / Remaining: {st.get('total_remaining_jpy', 0):,.2f} JPY"
+            except Exception:
+                pass
+        self.log(cat, "GCP Cost Tracker (16,000 JPY Cap)", has_budget, detail)
+
     def run_all(self):
         self.audit_manifest()
         self.audit_web_media()
@@ -233,6 +271,7 @@ class HubIntegrityAuditor:
         self.audit_video_queue()
         self.audit_tiktok_seo_scripts()
         self.audit_sns_automation()
+        self.audit_gcp_and_studio_4k()
         self.print_report()
 
     def print_report(self):
