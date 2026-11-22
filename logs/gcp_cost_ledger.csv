@@ -274,3 +274,160 @@ timestamp,service,operation_detail,units,cost_usd,cost_jpy,service_cumulative_sp
 2026-11-20 00:37:09,Cloud_TTS,de-DE-Studio-B (de) | #029_super-famicom-controller-oem-guide_s3,207_chars,0.033120,4.9680,579.4965,4920.5035,745.4336,15254.5664
 2026-11-20 00:37:11,Cloud_TTS,de-DE-Studio-B (de) | #029_super-famicom-controller-oem-guide_s4,205_chars,0.032800,4.9200,584.4165,4915.5835,750.3536,15249.6464
 2026-11-20 00:37:11,Cloud_TTS,de-DE-Studio-C (de) | #029_super-famicom-controller-oem-guide_s5,234_chars,0.037440,5.6160,590.0325,4909.9675,755.9696,15244.0304
+2026-11-22 02:27:08,Vertex_Imagen_3,gemini-2.5-flash-image | 023_smoke_test [Smoke Test MAX_COUNT=1 (Gemini 2.5 Flash Image)],1_img,0.040000,6.0000,48.0000,6452.0000,761.9696,15238.0304
+2026-11-22 02:27:12,Cloud_TTS,en-US-Journey-D (en) | 023_smoke_test (Smoke Test MAX_COUNT=1 (Cloud TTS)),98_chars,0.002940,0.4410,590.4735,4909.5265,762.4106,15237.5894
+2026-11-22 02:30:10,Gemini_Pro,gemini-3.1-pro-preview | 023_smoke_test (Smoke Test MAX_COUNT=1 (gemini-3.1-pro-preview)),"in:143,out:239",0.001374,0.2061,124.1432,3875.8568,762.6167,15237.3833
+2026-11-23 03:26:29,Vertex_Imagen_3,gemini-2.5-flash-image | 023_pc-engine-coregrafx-guide [Batch #1 4K Dark Studio Backdrop #023 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,54.0000,6446.0000,768.6167,15231.3833
+2026-11-23 03:26:37,Vertex_Imagen_3,gemini-2.5-flash-image | 024_panasonic-q-gamecube-dvd-guide [Batch #1 4K Dark Studio Backdrop #024 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,60.0000,6440.0000,774.6167,15225.3833
+2026-11-23 03:26:45,Vertex_Imagen_3,gemini-2.5-flash-image | 025_neo-geo-aes-console-import-guide [Batch #1 4K Dark Studio Backdrop #025 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,66.0000,6434.0000,780.6167,15219.3833
+2026-11-23 03:26:53,Vertex_Imagen_3,gemini-2.5-flash-image | 026_n64-expansion-pak-nus-007-guide [Batch #1 4K Dark Studio Backdrop #026 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,72.0000,6428.0000,786.6167,15213.3833
+2026-11-23 03:27:01,Vertex_Imagen_3,gemini-2.5-flash-image | 027_sega-saturn-3d-control-pad-guide [Batch #1 4K Dark Studio Backdrop #027 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,78.0000,6422.0000,792.6167,15207.3833
+2026-11-23 03:27:08,Vertex_Imagen_3,gemini-2.5-flash-image | 028_dreamcast-vmu-limited-colors-guide [Batch #1 4K Dark Studio Backdrop #028 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,84.0000,6416.0000,798.6167,15201.3833
+2026-11-23 03:27:23,Vertex_Imagen_3,gemini-2.5-flash-image | 029_super-famicom-controller-oem-guide [Batch #1 4K Dark Studio Backdrop #029 (gemini-2.5-flash-image)],1_img,0.040000,6.0000,90.0000,6410.0000,804.6167,15195.3833
+2026-11-23 03:29:23,Gemini_Pro,gemini-3.1-pro-preview | 023_pc-engine-coregrafx-guide (Batch #1 4-Lang Script & SEO Metadata #023 (gemini-3.1-pro-preview @ global)),"in:265,out:458",0.002621,0.3932,124.5364,3875.4636,805.0099,15194.9901
+2026-11-23 03:29:57,Gemini_Pro,gemini-3.1-pro-preview | 024_panasonic-q-gamecube-dvd-guide (Batch #1 4-Lang Script & SEO Metadata #024 (gemini-3.1-pro-preview @ global)),"in:251,out:435",0.002489,0.3733,124.9097,3875.0903,805.3832,15194.6168
+2026-11-23 03:30:19,Gemini_Pro,gemini-3.1-pro-preview | 025_neo-geo-aes-console-import-guide (Batch #1 4-Lang Script & SEO Metadata #025 (gemini-3.1-pro-preview @ global)),"in:275,out:460",0.002644,0.3966,125.3063,3874.6937,805.7798,15194.2202
+2026-11-23 03:31:27,Gemini_Pro,gemini-3.1-pro-preview | 026_n64-expansion-pak-nus-007-guide (Batch #1 4-Lang Script & SEO Metadata #026 (gemini-3.1-pro-preview @ global)),"in:267,out:892",0.004794,0.7191,126.0254,3873.9746,806.4989,15193.5011
+2026-11-23 03:31:45,Gemini_Pro,gemini-3.1-pro-preview | 027_sega-saturn-3d-control-pad-guide (Batch #1 4-Lang Script & SEO Metadata #027 (gemini-3.1-pro-preview @ global)),"in:254,out:418",0.002408,0.3611,126.3865,3873.6135,806.8600,15193.1400
+2026-11-23 03:32:04,Gemini_Pro,gemini-3.1-pro-preview | 028_dreamcast-vmu-limited-colors-guide (Batch #1 4-Lang Script & SEO Metadata #028 (gemini-3.1-pro-preview @ global)),"in:252,out:433",0.002480,0.3720,126.7585,3873.2415,807.2320,15192.7680
+2026-11-23 03:32:22,Gemini_Pro,gemini-3.1-pro-preview | 029_super-famicom-controller-oem-guide (Batch #1 4-Lang Script & SEO Metadata #029 (gemini-3.1-pro-preview @ global)),"in:254,out:409",0.002363,0.3544,127.1129,3872.8871,807.5864,15192.4136
+2026-11-23 03:33:15,Cloud_TTS,en-US-Journey-D (en) | #023_pc-engine-coregrafx-guide_s1,216_chars,0.006480,0.9720,591.4455,4908.5545,808.5584,15191.4416
+2026-11-23 03:33:19,Cloud_TTS,en-US-Journey-D (en) | #023_pc-engine-coregrafx-guide_s2,213_chars,0.006390,0.9585,592.4040,4907.5960,809.5169,15190.4831
+2026-11-23 03:33:23,Cloud_TTS,en-US-Journey-D (en) | #023_pc-engine-coregrafx-guide_s3,184_chars,0.005520,0.8280,593.2320,4906.7680,810.3449,15189.6551
+2026-11-23 03:33:27,Cloud_TTS,en-US-Journey-D (en) | #023_pc-engine-coregrafx-guide_s4,220_chars,0.006600,0.9900,594.2220,4905.7780,811.3349,15188.6651
+2026-11-23 03:33:29,Cloud_TTS,en-US-Studio-O (en) | #023_pc-engine-coregrafx-guide_s5,221_chars,0.035360,5.3040,599.5260,4900.4740,816.6389,15183.3611
+2026-11-23 03:33:43,Cloud_TTS,es-ES-Studio-F (es) | #023_pc-engine-coregrafx-guide_s1,238_chars,0.038080,5.7120,605.2380,4894.7620,822.3509,15177.6491
+2026-11-23 03:33:44,Cloud_TTS,es-ES-Studio-F (es) | #023_pc-engine-coregrafx-guide_s2,221_chars,0.035360,5.3040,610.5420,4889.4580,827.6549,15172.3451
+2026-11-23 03:33:46,Cloud_TTS,es-ES-Studio-F (es) | #023_pc-engine-coregrafx-guide_s3,209_chars,0.033440,5.0160,615.5580,4884.4420,832.6709,15167.3291
+2026-11-23 03:33:48,Cloud_TTS,es-ES-Studio-F (es) | #023_pc-engine-coregrafx-guide_s4,226_chars,0.036160,5.4240,620.9820,4879.0180,838.0949,15161.9051
+2026-11-23 03:33:48,Cloud_TTS,es-ES-Studio-C (es) | #023_pc-engine-coregrafx-guide_s5,215_chars,0.034400,5.1600,626.1420,4873.8580,843.2549,15156.7451
+2026-11-23 03:34:01,Cloud_TTS,fr-FR-Studio-D (fr) | #023_pc-engine-coregrafx-guide_s1,248_chars,0.039680,5.9520,632.0940,4867.9060,849.2069,15150.7931
+2026-11-23 03:34:01,Cloud_TTS,fr-FR-Studio-D (fr) | #023_pc-engine-coregrafx-guide_s2,237_chars,0.037920,5.6880,637.7820,4862.2180,854.8949,15145.1051
+2026-11-23 03:34:03,Cloud_TTS,fr-FR-Studio-D (fr) | #023_pc-engine-coregrafx-guide_s3,207_chars,0.033120,4.9680,642.7500,4857.2500,859.8629,15140.1371
+2026-11-23 03:34:05,Cloud_TTS,fr-FR-Studio-D (fr) | #023_pc-engine-coregrafx-guide_s4,210_chars,0.033600,5.0400,647.7900,4852.2100,864.9029,15135.0971
+2026-11-23 03:34:05,Cloud_TTS,fr-FR-Studio-A (fr) | #023_pc-engine-coregrafx-guide_s5,235_chars,0.037600,5.6400,653.4300,4846.5700,870.5429,15129.4571
+2026-11-23 03:34:17,Cloud_TTS,de-DE-Studio-B (de) | #023_pc-engine-coregrafx-guide_s1,248_chars,0.039680,5.9520,659.3820,4840.6180,876.4949,15123.5051
+2026-11-23 03:34:19,Cloud_TTS,de-DE-Studio-B (de) | #023_pc-engine-coregrafx-guide_s2,213_chars,0.034080,5.1120,664.4940,4835.5060,881.6069,15118.3931
+2026-11-23 03:34:21,Cloud_TTS,de-DE-Studio-B (de) | #023_pc-engine-coregrafx-guide_s3,189_chars,0.030240,4.5360,669.0300,4830.9700,886.1429,15113.8571
+2026-11-23 03:34:22,Cloud_TTS,de-DE-Studio-B (de) | #023_pc-engine-coregrafx-guide_s4,196_chars,0.031360,4.7040,673.7340,4826.2660,890.8469,15109.1531
+2026-11-23 03:34:22,Cloud_TTS,de-DE-Studio-C (de) | #023_pc-engine-coregrafx-guide_s5,234_chars,0.037440,5.6160,679.3500,4820.6500,896.4629,15103.5371
+2026-11-23 03:34:37,Cloud_TTS,en-US-Journey-D (en) | #024_panasonic-q-gamecube-dvd-guide_s1,210_chars,0.006300,0.9450,680.2950,4819.7050,897.4079,15102.5921
+2026-11-23 03:34:41,Cloud_TTS,en-US-Journey-D (en) | #024_panasonic-q-gamecube-dvd-guide_s2,226_chars,0.006780,1.0170,681.3120,4818.6880,898.4249,15101.5751
+2026-11-23 03:34:45,Cloud_TTS,en-US-Journey-D (en) | #024_panasonic-q-gamecube-dvd-guide_s3,212_chars,0.006360,0.9540,682.2660,4817.7340,899.3789,15100.6211
+2026-11-23 03:34:48,Cloud_TTS,en-US-Journey-D (en) | #024_panasonic-q-gamecube-dvd-guide_s4,212_chars,0.006360,0.9540,683.2200,4816.7800,900.3329,15099.6671
+2026-11-23 03:34:50,Cloud_TTS,en-US-Studio-O (en) | #024_panasonic-q-gamecube-dvd-guide_s5,221_chars,0.035360,5.3040,688.5240,4811.4760,905.6369,15094.3631
+2026-11-23 03:35:03,Cloud_TTS,es-ES-Studio-F (es) | #024_panasonic-q-gamecube-dvd-guide_s1,232_chars,0.037120,5.5680,694.0920,4805.9080,911.2049,15088.7951
+2026-11-23 03:35:05,Cloud_TTS,es-ES-Studio-F (es) | #024_panasonic-q-gamecube-dvd-guide_s2,219_chars,0.035040,5.2560,699.3480,4800.6520,916.4609,15083.5391
+2026-11-23 03:35:06,Cloud_TTS,es-ES-Studio-F (es) | #024_panasonic-q-gamecube-dvd-guide_s3,218_chars,0.034880,5.2320,704.5800,4795.4200,921.6929,15078.3071
+2026-11-23 03:35:08,Cloud_TTS,es-ES-Studio-F (es) | #024_panasonic-q-gamecube-dvd-guide_s4,204_chars,0.032640,4.8960,709.4760,4790.5240,926.5889,15073.4111
+2026-11-23 03:35:08,Cloud_TTS,es-ES-Studio-C (es) | #024_panasonic-q-gamecube-dvd-guide_s5,215_chars,0.034400,5.1600,714.6360,4785.3640,931.7489,15068.2511
+2026-11-23 03:35:21,Cloud_TTS,fr-FR-Studio-D (fr) | #024_panasonic-q-gamecube-dvd-guide_s1,242_chars,0.038720,5.8080,720.4440,4779.5560,937.5569,15062.4431
+2026-11-23 03:35:21,Cloud_TTS,fr-FR-Studio-D (fr) | #024_panasonic-q-gamecube-dvd-guide_s2,219_chars,0.035040,5.2560,725.7000,4774.3000,942.8129,15057.1871
+2026-11-23 03:35:23,Cloud_TTS,fr-FR-Studio-D (fr) | #024_panasonic-q-gamecube-dvd-guide_s3,205_chars,0.032800,4.9200,730.6200,4769.3800,947.7329,15052.2671
+2026-11-23 03:35:25,Cloud_TTS,fr-FR-Studio-D (fr) | #024_panasonic-q-gamecube-dvd-guide_s4,193_chars,0.030880,4.6320,735.2520,4764.7480,952.3649,15047.6351
+2026-11-23 03:35:25,Cloud_TTS,fr-FR-Studio-A (fr) | #024_panasonic-q-gamecube-dvd-guide_s5,235_chars,0.037600,5.6400,740.8920,4759.1080,958.0049,15041.9951
+2026-11-23 03:35:37,Cloud_TTS,de-DE-Studio-B (de) | #024_panasonic-q-gamecube-dvd-guide_s1,242_chars,0.038720,5.8080,746.7000,4753.3000,963.8129,15036.1871
+2026-11-23 03:35:39,Cloud_TTS,de-DE-Studio-B (de) | #024_panasonic-q-gamecube-dvd-guide_s2,217_chars,0.034720,5.2080,751.9080,4748.0920,969.0209,15030.9791
+2026-11-23 03:35:40,Cloud_TTS,de-DE-Studio-B (de) | #024_panasonic-q-gamecube-dvd-guide_s3,199_chars,0.031840,4.7760,756.6840,4743.3160,973.7969,15026.2031
+2026-11-23 03:35:43,Cloud_TTS,de-DE-Studio-B (de) | #024_panasonic-q-gamecube-dvd-guide_s4,203_chars,0.032480,4.8720,761.5560,4738.4440,978.6689,15021.3311
+2026-11-23 03:35:44,Cloud_TTS,de-DE-Studio-C (de) | #024_panasonic-q-gamecube-dvd-guide_s5,234_chars,0.037440,5.6160,767.1720,4732.8280,984.2849,15015.7151
+2026-11-23 03:35:59,Cloud_TTS,en-US-Journey-D (en) | #025_neo-geo-aes-console-import-guide_s1,219_chars,0.006570,0.9855,768.1575,4731.8425,985.2704,15014.7296
+2026-11-23 03:36:02,Cloud_TTS,en-US-Journey-D (en) | #025_neo-geo-aes-console-import-guide_s2,212_chars,0.006360,0.9540,769.1115,4730.8885,986.2244,15013.7756
+2026-11-23 03:36:06,Cloud_TTS,en-US-Journey-D (en) | #025_neo-geo-aes-console-import-guide_s3,233_chars,0.006990,1.0485,770.1600,4729.8400,987.2729,15012.7271
+2026-11-23 03:36:11,Cloud_TTS,en-US-Journey-D (en) | #025_neo-geo-aes-console-import-guide_s4,204_chars,0.006120,0.9180,771.0780,4728.9220,988.1909,15011.8091
+2026-11-23 03:36:11,Cloud_TTS,en-US-Studio-O (en) | #025_neo-geo-aes-console-import-guide_s5,221_chars,0.035360,5.3040,776.3820,4723.6180,993.4949,15006.5051
+2026-11-23 03:36:24,Cloud_TTS,es-ES-Studio-F (es) | #025_neo-geo-aes-console-import-guide_s1,241_chars,0.038560,5.7840,782.1660,4717.8340,999.2789,15000.7211
+2026-11-23 03:36:24,Cloud_TTS,es-ES-Studio-F (es) | #025_neo-geo-aes-console-import-guide_s2,205_chars,0.032800,4.9200,787.0860,4712.9140,1004.1989,14995.8011
+2026-11-23 03:36:26,Cloud_TTS,es-ES-Studio-F (es) | #025_neo-geo-aes-console-import-guide_s3,228_chars,0.036480,5.4720,792.5580,4707.4420,1009.6709,14990.3291
+2026-11-23 03:36:28,Cloud_TTS,es-ES-Studio-F (es) | #025_neo-geo-aes-console-import-guide_s4,219_chars,0.035040,5.2560,797.8140,4702.1860,1014.9269,14985.0731
+2026-11-23 03:36:28,Cloud_TTS,es-ES-Studio-C (es) | #025_neo-geo-aes-console-import-guide_s5,215_chars,0.034400,5.1600,802.9740,4697.0260,1020.0869,14979.9131
+2026-11-23 03:36:41,Cloud_TTS,fr-FR-Studio-D (fr) | #025_neo-geo-aes-console-import-guide_s1,251_chars,0.040160,6.0240,808.9980,4691.0020,1026.1109,14973.8891
+2026-11-23 03:36:43,Cloud_TTS,fr-FR-Studio-D (fr) | #025_neo-geo-aes-console-import-guide_s2,215_chars,0.034400,5.1600,814.1580,4685.8420,1031.2709,14968.7291
+2026-11-23 03:36:44,Cloud_TTS,fr-FR-Studio-D (fr) | #025_neo-geo-aes-console-import-guide_s3,174_chars,0.027840,4.1760,818.3340,4681.6660,1035.4469,14964.5531
+2026-11-23 03:36:46,Cloud_TTS,fr-FR-Studio-D (fr) | #025_neo-geo-aes-console-import-guide_s4,218_chars,0.034880,5.2320,823.5660,4676.4340,1040.6789,14959.3211
+2026-11-23 03:36:48,Cloud_TTS,fr-FR-Studio-A (fr) | #025_neo-geo-aes-console-import-guide_s5,235_chars,0.037600,5.6400,829.2060,4670.7940,1046.3189,14953.6811
+2026-11-23 03:37:00,Cloud_TTS,de-DE-Studio-B (de) | #025_neo-geo-aes-console-import-guide_s1,251_chars,0.040160,6.0240,835.2300,4664.7700,1052.3429,14947.6571
+2026-11-23 03:37:02,Cloud_TTS,de-DE-Studio-B (de) | #025_neo-geo-aes-console-import-guide_s2,214_chars,0.034240,5.1360,840.3660,4659.6340,1057.4789,14942.5211
+2026-11-23 03:37:03,Cloud_TTS,de-DE-Studio-B (de) | #025_neo-geo-aes-console-import-guide_s3,155_chars,0.024800,3.7200,844.0860,4655.9140,1061.1989,14938.8011
+2026-11-23 03:37:05,Cloud_TTS,de-DE-Studio-B (de) | #025_neo-geo-aes-console-import-guide_s4,188_chars,0.030080,4.5120,848.5980,4651.4020,1065.7109,14934.2891
+2026-11-23 03:37:05,Cloud_TTS,de-DE-Studio-C (de) | #025_neo-geo-aes-console-import-guide_s5,234_chars,0.037440,5.6160,854.2140,4645.7860,1071.3269,14928.6731
+2026-11-23 03:37:20,Cloud_TTS,en-US-Journey-D (en) | #026_n64-expansion-pak-nus-007-guide_s1,211_chars,0.006330,0.9495,855.1635,4644.8365,1072.2764,14927.7236
+2026-11-23 03:37:25,Cloud_TTS,en-US-Journey-D (en) | #026_n64-expansion-pak-nus-007-guide_s2,208_chars,0.006240,0.9360,856.0995,4643.9005,1073.2124,14926.7876
+2026-11-23 03:37:30,Cloud_TTS,en-US-Journey-D (en) | #026_n64-expansion-pak-nus-007-guide_s3,198_chars,0.005940,0.8910,856.9905,4643.0095,1074.1034,14925.8966
+2026-11-23 03:37:34,Cloud_TTS,en-US-Journey-D (en) | #026_n64-expansion-pak-nus-007-guide_s4,190_chars,0.005700,0.8550,857.8455,4642.1545,1074.9584,14925.0416
+2026-11-23 03:37:34,Cloud_TTS,en-US-Studio-O (en) | #026_n64-expansion-pak-nus-007-guide_s5,221_chars,0.035360,5.3040,863.1495,4636.8505,1080.2624,14919.7376
+2026-11-23 03:37:47,Cloud_TTS,es-ES-Studio-F (es) | #026_n64-expansion-pak-nus-007-guide_s1,233_chars,0.037280,5.5920,868.7415,4631.2585,1085.8544,14914.1456
+2026-11-23 03:37:48,Cloud_TTS,es-ES-Studio-F (es) | #026_n64-expansion-pak-nus-007-guide_s2,196_chars,0.031360,4.7040,873.4455,4626.5545,1090.5584,14909.4416
+2026-11-23 03:37:50,Cloud_TTS,es-ES-Studio-F (es) | #026_n64-expansion-pak-nus-007-guide_s3,211_chars,0.033760,5.0640,878.5095,4621.4905,1095.6224,14904.3776
+2026-11-23 03:37:52,Cloud_TTS,es-ES-Studio-F (es) | #026_n64-expansion-pak-nus-007-guide_s4,197_chars,0.031520,4.7280,883.2375,4616.7625,1100.3504,14899.6496
+2026-11-23 03:37:53,Cloud_TTS,es-ES-Studio-C (es) | #026_n64-expansion-pak-nus-007-guide_s5,215_chars,0.034400,5.1600,888.3975,4611.6025,1105.5104,14894.4896
+2026-11-23 03:38:07,Cloud_TTS,fr-FR-Studio-D (fr) | #026_n64-expansion-pak-nus-007-guide_s1,243_chars,0.038880,5.8320,894.2295,4605.7705,1111.3424,14888.6576
+2026-11-23 03:38:08,Cloud_TTS,fr-FR-Studio-D (fr) | #026_n64-expansion-pak-nus-007-guide_s2,205_chars,0.032800,4.9200,899.1495,4600.8505,1116.2624,14883.7376
+2026-11-23 03:38:10,Cloud_TTS,fr-FR-Studio-D (fr) | #026_n64-expansion-pak-nus-007-guide_s3,207_chars,0.033120,4.9680,904.1175,4595.8825,1121.2304,14878.7696
+2026-11-23 03:38:12,Cloud_TTS,fr-FR-Studio-D (fr) | #026_n64-expansion-pak-nus-007-guide_s4,188_chars,0.030080,4.5120,908.6295,4591.3705,1125.7424,14874.2576
+2026-11-23 03:38:12,Cloud_TTS,fr-FR-Studio-A (fr) | #026_n64-expansion-pak-nus-007-guide_s5,235_chars,0.037600,5.6400,914.2695,4585.7305,1131.3824,14868.6176
+2026-11-23 03:38:24,Cloud_TTS,de-DE-Studio-B (de) | #026_n64-expansion-pak-nus-007-guide_s1,243_chars,0.038880,5.8320,920.1015,4579.8985,1137.2144,14862.7856
+2026-11-23 03:38:24,Cloud_TTS,de-DE-Studio-B (de) | #026_n64-expansion-pak-nus-007-guide_s2,202_chars,0.032320,4.8480,924.9495,4575.0505,1142.0624,14857.9376
+2026-11-23 03:38:26,Cloud_TTS,de-DE-Studio-B (de) | #026_n64-expansion-pak-nus-007-guide_s3,193_chars,0.030880,4.6320,929.5815,4570.4185,1146.6944,14853.3056
+2026-11-23 03:38:28,Cloud_TTS,de-DE-Studio-B (de) | #026_n64-expansion-pak-nus-007-guide_s4,189_chars,0.030240,4.5360,934.1175,4565.8825,1151.2304,14848.7696
+2026-11-23 03:38:28,Cloud_TTS,de-DE-Studio-C (de) | #026_n64-expansion-pak-nus-007-guide_s5,234_chars,0.037440,5.6160,939.7335,4560.2665,1156.8464,14843.1536
+2026-11-23 03:38:43,Cloud_TTS,en-US-Journey-D (en) | #027_sega-saturn-3d-control-pad-guide_s1,197_chars,0.005910,0.8865,940.6200,4559.3800,1157.7329,14842.2671
+2026-11-23 03:38:48,Cloud_TTS,en-US-Journey-D (en) | #027_sega-saturn-3d-control-pad-guide_s2,206_chars,0.006180,0.9270,941.5470,4558.4530,1158.6599,14841.3401
+2026-11-23 03:38:51,Cloud_TTS,en-US-Journey-D (en) | #027_sega-saturn-3d-control-pad-guide_s3,216_chars,0.006480,0.9720,942.5190,4557.4810,1159.6319,14840.3681
+2026-11-23 03:38:55,Cloud_TTS,en-US-Journey-D (en) | #027_sega-saturn-3d-control-pad-guide_s4,212_chars,0.006360,0.9540,943.4730,4556.5270,1160.5859,14839.4141
+2026-11-23 03:38:55,Cloud_TTS,en-US-Studio-O (en) | #027_sega-saturn-3d-control-pad-guide_s5,221_chars,0.035360,5.3040,948.7770,4551.2230,1165.8899,14834.1101
+2026-11-23 03:39:07,Cloud_TTS,es-ES-Studio-F (es) | #027_sega-saturn-3d-control-pad-guide_s1,219_chars,0.035040,5.2560,954.0330,4545.9670,1171.1459,14828.8541
+2026-11-23 03:39:07,Cloud_TTS,es-ES-Studio-F (es) | #027_sega-saturn-3d-control-pad-guide_s2,206_chars,0.032960,4.9440,958.9770,4541.0230,1176.0899,14823.9101
+2026-11-23 03:39:09,Cloud_TTS,es-ES-Studio-F (es) | #027_sega-saturn-3d-control-pad-guide_s3,190_chars,0.030400,4.5600,963.5370,4536.4630,1180.6499,14819.3501
+2026-11-23 03:39:10,Cloud_TTS,es-ES-Studio-F (es) | #027_sega-saturn-3d-control-pad-guide_s4,206_chars,0.032960,4.9440,968.4810,4531.5190,1185.5939,14814.4061
+2026-11-23 03:39:11,Cloud_TTS,es-ES-Studio-C (es) | #027_sega-saturn-3d-control-pad-guide_s5,215_chars,0.034400,5.1600,973.6410,4526.3590,1190.7539,14809.2461
+2026-11-23 03:39:23,Cloud_TTS,fr-FR-Studio-D (fr) | #027_sega-saturn-3d-control-pad-guide_s1,229_chars,0.036640,5.4960,979.1370,4520.8630,1196.2499,14803.7501
+2026-11-23 03:39:23,Cloud_TTS,fr-FR-Studio-D (fr) | #027_sega-saturn-3d-control-pad-guide_s2,202_chars,0.032320,4.8480,983.9850,4516.0150,1201.0979,14798.9021
+2026-11-23 03:39:25,Cloud_TTS,fr-FR-Studio-D (fr) | #027_sega-saturn-3d-control-pad-guide_s3,188_chars,0.030080,4.5120,988.4970,4511.5030,1205.6099,14794.3901
+2026-11-23 03:39:26,Cloud_TTS,fr-FR-Studio-D (fr) | #027_sega-saturn-3d-control-pad-guide_s4,213_chars,0.034080,5.1120,993.6090,4506.3910,1210.7219,14789.2781
+2026-11-23 03:39:27,Cloud_TTS,fr-FR-Studio-A (fr) | #027_sega-saturn-3d-control-pad-guide_s5,235_chars,0.037600,5.6400,999.2490,4500.7510,1216.3619,14783.6381
+2026-11-23 03:39:39,Cloud_TTS,de-DE-Studio-B (de) | #027_sega-saturn-3d-control-pad-guide_s1,229_chars,0.036640,5.4960,1004.7450,4495.2550,1221.8579,14778.1421
+2026-11-23 03:39:40,Cloud_TTS,de-DE-Studio-B (de) | #027_sega-saturn-3d-control-pad-guide_s2,202_chars,0.032320,4.8480,1009.5930,4490.4070,1226.7059,14773.2941
+2026-11-23 03:39:42,Cloud_TTS,de-DE-Studio-B (de) | #027_sega-saturn-3d-control-pad-guide_s3,194_chars,0.031040,4.6560,1014.2490,4485.7510,1231.3619,14768.6381
+2026-11-23 03:39:44,Cloud_TTS,de-DE-Studio-B (de) | #027_sega-saturn-3d-control-pad-guide_s4,197_chars,0.031520,4.7280,1018.9770,4481.0230,1236.0899,14763.9101
+2026-11-23 03:39:44,Cloud_TTS,de-DE-Studio-C (de) | #027_sega-saturn-3d-control-pad-guide_s5,234_chars,0.037440,5.6160,1024.5930,4475.4070,1241.7059,14758.2941
+2026-11-23 03:39:59,Cloud_TTS,en-US-Journey-D (en) | #028_dreamcast-vmu-limited-colors-guide_s1,204_chars,0.006120,0.9180,1025.5110,4474.4890,1242.6239,14757.3761
+2026-11-23 03:40:03,Cloud_TTS,en-US-Journey-D (en) | #028_dreamcast-vmu-limited-colors-guide_s2,214_chars,0.006420,0.9630,1026.4740,4473.5260,1243.5869,14756.4131
+2026-11-23 03:40:07,Cloud_TTS,en-US-Journey-D (en) | #028_dreamcast-vmu-limited-colors-guide_s3,209_chars,0.006270,0.9405,1027.4145,4472.5855,1244.5274,14755.4726
+2026-11-23 03:40:11,Cloud_TTS,en-US-Journey-D (en) | #028_dreamcast-vmu-limited-colors-guide_s4,194_chars,0.005820,0.8730,1028.2875,4471.7125,1245.4004,14754.5996
+2026-11-23 03:40:12,Cloud_TTS,en-US-Studio-O (en) | #028_dreamcast-vmu-limited-colors-guide_s5,221_chars,0.035360,5.3040,1033.5915,4466.4085,1250.7044,14749.2956
+2026-11-23 03:40:24,Cloud_TTS,es-ES-Studio-F (es) | #028_dreamcast-vmu-limited-colors-guide_s1,226_chars,0.036160,5.4240,1039.0155,4460.9845,1256.1284,14743.8716
+2026-11-23 03:40:24,Cloud_TTS,es-ES-Studio-F (es) | #028_dreamcast-vmu-limited-colors-guide_s2,205_chars,0.032800,4.9200,1043.9355,4456.0645,1261.0484,14738.9516
+2026-11-23 03:40:25,Cloud_TTS,es-ES-Studio-F (es) | #028_dreamcast-vmu-limited-colors-guide_s3,206_chars,0.032960,4.9440,1048.8795,4451.1205,1265.9924,14734.0076
+2026-11-23 03:40:27,Cloud_TTS,es-ES-Studio-F (es) | #028_dreamcast-vmu-limited-colors-guide_s4,213_chars,0.034080,5.1120,1053.9915,4446.0085,1271.1044,14728.8956
+2026-11-23 03:40:27,Cloud_TTS,es-ES-Studio-C (es) | #028_dreamcast-vmu-limited-colors-guide_s5,215_chars,0.034400,5.1600,1059.1515,4440.8485,1276.2644,14723.7356
+2026-11-23 03:40:40,Cloud_TTS,fr-FR-Studio-D (fr) | #028_dreamcast-vmu-limited-colors-guide_s1,236_chars,0.037760,5.6640,1064.8155,4435.1845,1281.9284,14718.0716
+2026-11-23 03:40:41,Cloud_TTS,fr-FR-Studio-D (fr) | #028_dreamcast-vmu-limited-colors-guide_s2,199_chars,0.031840,4.7760,1069.5915,4430.4085,1286.7044,14713.2956
+2026-11-23 03:40:42,Cloud_TTS,fr-FR-Studio-D (fr) | #028_dreamcast-vmu-limited-colors-guide_s3,208_chars,0.033280,4.9920,1074.5835,4425.4165,1291.6964,14708.3036
+2026-11-23 03:40:44,Cloud_TTS,fr-FR-Studio-D (fr) | #028_dreamcast-vmu-limited-colors-guide_s4,203_chars,0.032480,4.8720,1079.4555,4420.5445,1296.5684,14703.4316
+2026-11-23 03:40:44,Cloud_TTS,fr-FR-Studio-A (fr) | #028_dreamcast-vmu-limited-colors-guide_s5,235_chars,0.037600,5.6400,1085.0955,4414.9045,1302.2084,14697.7916
+2026-11-23 03:40:56,Cloud_TTS,de-DE-Studio-B (de) | #028_dreamcast-vmu-limited-colors-guide_s1,236_chars,0.037760,5.6640,1090.7595,4409.2405,1307.8724,14692.1276
+2026-11-23 03:40:56,Cloud_TTS,de-DE-Studio-B (de) | #028_dreamcast-vmu-limited-colors-guide_s2,203_chars,0.032480,4.8720,1095.6315,4404.3685,1312.7444,14687.2556
+2026-11-23 03:40:57,Cloud_TTS,de-DE-Studio-B (de) | #028_dreamcast-vmu-limited-colors-guide_s3,201_chars,0.032160,4.8240,1100.4555,4399.5445,1317.5684,14682.4316
+2026-11-23 03:40:59,Cloud_TTS,de-DE-Studio-B (de) | #028_dreamcast-vmu-limited-colors-guide_s4,194_chars,0.031040,4.6560,1105.1115,4394.8885,1322.2244,14677.7756
+2026-11-23 03:40:59,Cloud_TTS,de-DE-Studio-C (de) | #028_dreamcast-vmu-limited-colors-guide_s5,234_chars,0.037440,5.6160,1110.7275,4389.2725,1327.8404,14672.1596
+2026-11-23 03:41:15,Cloud_TTS,en-US-Journey-D (en) | #029_super-famicom-controller-oem-guide_s1,195_chars,0.005850,0.8775,1111.6050,4388.3950,1328.7179,14671.2821
+2026-11-23 03:41:19,Cloud_TTS,en-US-Journey-D (en) | #029_super-famicom-controller-oem-guide_s2,204_chars,0.006120,0.9180,1112.5230,4387.4770,1329.6359,14670.3641
+2026-11-23 03:41:23,Cloud_TTS,en-US-Journey-D (en) | #029_super-famicom-controller-oem-guide_s3,196_chars,0.005880,0.8820,1113.4050,4386.5950,1330.5179,14669.4821
+2026-11-23 03:41:27,Cloud_TTS,en-US-Journey-D (en) | #029_super-famicom-controller-oem-guide_s4,214_chars,0.006420,0.9630,1114.3680,4385.6320,1331.4809,14668.5191
+2026-11-23 03:41:27,Cloud_TTS,en-US-Studio-O (en) | #029_super-famicom-controller-oem-guide_s5,221_chars,0.035360,5.3040,1119.6720,4380.3280,1336.7849,14663.2151
+2026-11-23 03:41:41,Cloud_TTS,es-ES-Studio-F (es) | #029_super-famicom-controller-oem-guide_s1,217_chars,0.034720,5.2080,1124.8800,4375.1200,1341.9929,14658.0071
+2026-11-23 03:41:42,Cloud_TTS,es-ES-Studio-F (es) | #029_super-famicom-controller-oem-guide_s2,213_chars,0.034080,5.1120,1129.9920,4370.0080,1347.1049,14652.8951
+2026-11-23 03:41:44,Cloud_TTS,es-ES-Studio-F (es) | #029_super-famicom-controller-oem-guide_s3,206_chars,0.032960,4.9440,1134.9360,4365.0640,1352.0489,14647.9511
+2026-11-23 03:41:46,Cloud_TTS,es-ES-Studio-F (es) | #029_super-famicom-controller-oem-guide_s4,205_chars,0.032800,4.9200,1139.8560,4360.1440,1356.9689,14643.0311
+2026-11-23 03:41:46,Cloud_TTS,es-ES-Studio-C (es) | #029_super-famicom-controller-oem-guide_s5,215_chars,0.034400,5.1600,1145.0160,4354.9840,1362.1289,14637.8711
+2026-11-23 03:42:02,Cloud_TTS,fr-FR-Studio-D (fr) | #029_super-famicom-controller-oem-guide_s1,227_chars,0.036320,5.4480,1150.4640,4349.5360,1367.5769,14632.4231
+2026-11-23 03:42:03,Cloud_TTS,fr-FR-Studio-D (fr) | #029_super-famicom-controller-oem-guide_s2,195_chars,0.031200,4.6800,1155.1440,4344.8560,1372.2569,14627.7431
+2026-11-23 03:42:05,Cloud_TTS,fr-FR-Studio-D (fr) | #029_super-famicom-controller-oem-guide_s3,197_chars,0.031520,4.7280,1159.8720,4340.1280,1376.9849,14623.0151
+2026-11-23 03:42:07,Cloud_TTS,fr-FR-Studio-D (fr) | #029_super-famicom-controller-oem-guide_s4,213_chars,0.034080,5.1120,1164.9840,4335.0160,1382.0969,14617.9031
+2026-11-23 03:42:07,Cloud_TTS,fr-FR-Studio-A (fr) | #029_super-famicom-controller-oem-guide_s5,235_chars,0.037600,5.6400,1170.6240,4329.3760,1387.7369,14612.2631
+2026-11-23 03:42:19,Cloud_TTS,de-DE-Studio-B (de) | #029_super-famicom-controller-oem-guide_s1,227_chars,0.036320,5.4480,1176.0720,4323.9280,1393.1849,14606.8151
+2026-11-23 03:42:19,Cloud_TTS,de-DE-Studio-B (de) | #029_super-famicom-controller-oem-guide_s2,181_chars,0.028960,4.3440,1180.4160,4319.5840,1397.5289,14602.4711
+2026-11-23 03:42:21,Cloud_TTS,de-DE-Studio-B (de) | #029_super-famicom-controller-oem-guide_s3,199_chars,0.031840,4.7760,1185.1920,4314.8080,1402.3049,14597.6951
+2026-11-23 03:42:22,Cloud_TTS,de-DE-Studio-B (de) | #029_super-famicom-controller-oem-guide_s4,197_chars,0.031520,4.7280,1189.9200,4310.0800,1407.0329,14592.9671
+2026-11-23 03:42:23,Cloud_TTS,de-DE-Studio-C (de) | #029_super-famicom-controller-oem-guide_s5,234_chars,0.037440,5.6160,1195.5360,4304.4640,1412.6489,14587.3511

@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-11-22 02:30:10",
+  "project_id": "text-to-speech-513008",
+  "key_path": "C:\\Users\\inomo\\デスクトップ\\GCP_Keys\\jdm.json",
+  "gitignore_protected": true,
+  "max_count_limit": 1,
+  "test_1_gemini_flash_image": {
+    "status": "PASS",
+    "model": "gemini-2.5-flash-image",
+    "location": "us-central1",
+    "calls": 1,
+    "output_path": "C:\\Users\\inomo\\デスクトップ\\EC\\logs\\gcp_smoke_test_20261122\\test_023_gemini_25_image.png",
+    "size_bytes": 1219326,
+    "dimensions": "1024x1024",
+    "error": null
+  },
+  "test_2_gemini_pro": {
+    "status": "PASS",
+    "model": "gemini-3.1-pro-preview",
+    "location": "global",
+    "calls": 1,
+    "output_path": "C:\\Users\\inomo\\デスクトップ\\EC\\logs\\gcp_smoke_test_20261122\\test_023_gemini_pro.json",
+    "size_bytes": 995,
+    "input_tokens": 143,
+    "output_tokens": 239,
+    "total_tokens": 1729,
+    "error": null
+  },
+  "test_3_cloud_tts": {
+    "status": "PASS",
+    "model": "en-US-Journey-D",
+    "location": "global (Cloud TTS)",
+    "calls": 1,
+    "output_path": "C:\\Users\\inomo\\デスクトップ\\EC\\logs\\gcp_smoke_test_20261122\\test_023_tts.mp3",
+    "size_bytes": 28032,
+    "char_count": 98,
+    "error": null
+  }
+}

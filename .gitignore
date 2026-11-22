@@ -1,4 +1,6 @@
 affiliate_config.txt
+jdm.json
+*.key.json
 *service_account*.json
 text-to-speech-*.json
 __pycache__/
