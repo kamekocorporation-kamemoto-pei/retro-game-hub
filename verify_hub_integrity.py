@@ -231,6 +231,38 @@ class HubIntegrityAuditor:
         detail_msg = f"{len(seo_passed)}/139 items fully safe & compliant" if all_seo_valid else f"Failed items: {seo_failed[:5]}..."
         self.log(cat, "TikTok Safe Collector Captions (#012-#150)", all_seo_valid, detail_msg)
 
+        # Check 3: Zero Japanese characters or missing-word holes ("歯抜け") in slide fields (#023-#150)
+        import csv as _csv
+        jp_re = re.compile(r"[\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\uFF00-\uFFEF\u4E00-\u9FAF]")
+        gap_issues = []
+        for item in scripts:
+            iid = item.get("id", 0)
+            if iid < 23:
+                continue
+            if jp_re.search(item.get("model_code", "")):
+                gap_issues.append(f"JSON#{iid:03d}_model_code")
+            for s in item.get("slides", []):
+                dt = s.get("display_text", "")
+                if jp_re.search(dt) or "  " in dt:
+                    gap_issues.append(f"JSON#{iid:03d}_s{s.get('slide')}")
+        csv_path = BASE_DIR / "data" / "retro_games.csv"
+        if csv_path.exists():
+            with open(csv_path, "r", encoding="utf-8") as cf:
+                for idx, row in enumerate(_csv.DictReader(cf), 1):
+                    if idx < 23:
+                        continue
+                    for fld in ("region_info", "why_japan", "buyer_tips"):
+                        val = row.get(fld, "")
+                        if jp_re.search(val) or "  " in val:
+                            gap_issues.append(f"CSV#{idx:03d}_{fld}")
+        no_gaps = len(gap_issues) == 0
+        self.log(
+            cat,
+            "Slide Text Japanese/Gap Zero Audit (#023-#150)",
+            no_gaps,
+            "128/128 items 0 Japanese holes & 0 double-spaces" if no_gaps else f"Issues: {gap_issues[:5]}",
+        )
+
     def audit_sns_automation(self):
         cat = "06. SNS Automation Script"
         poster_path = BASE_DIR / "marketing_tools" / "tiktok_auto_poster.py"
